@@ -9,3 +9,5 @@ matplotlib
 jinja2
 numpy
 scikit-learn
+seaborn
+japanize-matplotlib
