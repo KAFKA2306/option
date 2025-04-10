@@ -86,7 +86,7 @@ def generate_html_report(intervals=[Client.KLINE_INTERVAL_1HOUR, Client.KLINE_IN
     )
     
     # HTMLファイルの保存
-    html_file_path = os.path.join("index.html")
+    html_file_path = os.path.join(report_dir, "index.html")
     with open(html_file_path, "w", encoding="utf-8") as f:
         f.write(html_content)
     
