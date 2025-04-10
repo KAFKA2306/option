@@ -2,5 +2,5 @@
 #*.png
 *M:\ML\Finance\option\.venv*
 *.venv*
-*output*
+#*output*
 *pyc
