@@ -1,5 +1,5 @@
 *.parquet
-*.png
+#*.png
 *M:\ML\Finance\option\.venv*
 *.venv*
 *output*

@@ -3,3 +3,6 @@ pygwalker
 pandas
 fastparquet
 yfinance
+python-binance
+pyarrow
+matplotlib

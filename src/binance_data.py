@@ -22,26 +22,22 @@ def get_historical_data(months=3, interval=Client.KLINE_INTERVAL_1HOUR):
         print("Binance APIクライアントの初期化に失敗しました。")
         return None, None
 
-    end_date = datetime.now()
-    start_date = end_date - timedelta(days=30 * months)
+    # タイムスタンプ基準を統一
+    end_date = datetime.now().replace(minute=0, second=0, microsecond=0)
+    start_date = end_date - timedelta(hours=30*24*months)  # 時間ベースで正確に計算
 
-    start_str = start_date.strftime("%Y-%m-%d %H:%M:%S")
-    end_str = end_date.strftime("%Y-%m-%d %H:%M:%S")
+    # 現物と先物で同一パラメータを適用
+    params = {
+        'symbol': "BTCUSDT",
+        'interval': interval,
+        'start_str': start_date.strftime("%Y-%m-%d %H:%M:%S"),
+        'end_str': end_date.strftime("%Y-%m-%d %H:%M:%S"),
+        'limit': 1000  # 最大取得数を明示的に指定
+    }
 
     try:
-        spot_klines = client.get_historical_klines(
-            symbol="BTCUSDT",
-            interval=interval,
-            start_str=start_str,
-            end_str=end_str
-        )
-
-        futures_klines = client.futures_historical_klines(
-            symbol="BTCUSDT",
-            interval=interval,
-            start_str=start_str,
-            end_str=end_str
-        )
+        spot_klines = client.get_historical_klines(**params)
+        futures_klines = client.futures_historical_klines(**params)
     except Exception as e:
         print(f"Binance APIからのデータ取得中にエラーが発生しました: {e}")
         return None, None

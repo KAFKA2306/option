@@ -1,40 +1,58 @@
-# src/utils.py
 import os
 import pandas as pd
-import pyarrow as pa # エラーハンドリングで使用
-from config import OUTPUT_DIR
+import pyarrow
+from config import RAW_OUTPUT_DIR, PROCESSED_OUTPUT_DIR, ANALYSIS_OUTPUT_DIR
 
-def save_data(data, subfolder, filename):
-    """データをparquetファイルとして保存する関数（タイムスタンプをdatetime形式で保存）"""
-    folder_path = os.path.join(OUTPUT_DIR, subfolder)
-    os.makedirs(folder_path, exist_ok=True)
-    file_path = os.path.join(folder_path, f"{filename}.parquet")
-    data_to_save = data.copy()  # 元のDataFrameを変更しないようにコピー
-
-    # datetime型の列を特定
-    datetime_columns = data_to_save.select_dtypes(include=['datetime64']).columns
-
+def save_data(df, data_type, filename):
+    """データをファイルに保存する関数"""
     try:
-        # datetime型の列をそのまま保存
-        data_to_save.to_parquet(file_path, index=True)
-        print(f"Data successfully saved to {file_path}")
-        print(f"Datetime columns preserved: {list(datetime_columns)}")
+        if data_type == "raw":
+            filepath = os.path.join(RAW_OUTPUT_DIR, f"{filename}.parquet")
+        elif data_type == "processed":
+            filepath = os.path.join(PROCESSED_OUTPUT_DIR, f"{filename}.parquet")
+        elif data_type == "analysis":
+            filepath = os.path.join(ANALYSIS_OUTPUT_DIR, f"{filename}.parquet")
+        else:
+            print(f"Error: Unknown data_type: {data_type}")
+            return
+        df.to_parquet(filepath)
+        print(f"Data successfully saved to {filepath}")
     except Exception as e:
-        print(f"Error saving data to {file_path}: {e}")
-        print("Data types:")
-        print(data_to_save.dtypes)
-        raise  # エラーを再発生させる
+        print(f"Error saving data: {e}")
 
-    return file_path
-
-def load_data(subfolder, filename):
-    """保存されたparquetファイルを読み込む関数"""
-    file_path = os.path.join(OUTPUT_DIR, subfolder, f"{filename}.parquet")
-    if os.path.exists(file_path):
-        df = pd.read_parquet(file_path)
-        print(f"Data loaded from {file_path}")
-        print("Data types:")
-        print(df.dtypes)
+def load_data(data_type, filename):
+    """ファイルからデータを読み込む関数"""
+    try:
+        if data_type == "raw":
+            filepath = os.path.join(RAW_OUTPUT_DIR, f"{filename}.parquet")
+        elif data_type == "processed":
+            filepath = os.path.join(PROCESSED_OUTPUT_DIR, f"{filename}.parquet")
+        elif data_type == "analysis":
+            filepath = os.path.join(ANALYSIS_OUTPUT_DIR, f"{filename}.parquet")
+        else:
+            print(f"Error: Unknown data_type: {data_type}")
+            return None
+        df = pd.read_parquet(filepath)
         return df
-    print(f"File not found: {file_path}")
-    return None
+    except FileNotFoundError:
+        print(f"File not found: {filepath}")
+        return None
+    except Exception as e:
+        print(f"Error loading data: {e}")
+        return None
+
+def align_timestamps(spot_df, futures_df):
+    """現物と先物のタイムスタンプを揃える関数"""
+    merged_df = pd.merge(
+        spot_df[['close']].rename(columns={'close': 'spot_close'}),
+        futures_df[['close']].rename(columns={'close': 'futures_close'}),
+        left_index=True,
+        right_index=True,
+        how='outer',  # 全データを保持
+        suffixes=('_spot', '_futures')
+    ).interpolate(method='time')  # 時間軸補間
+
+    spot_aligned = merged_df[['spot_close']].rename(columns={'spot_close': 'close'}).dropna()
+    futures_aligned = merged_df[['futures_close']].rename(columns={'futures_close': 'close'}).dropna()
+
+    return spot_aligned, futures_aligned
