@@ -69,14 +69,13 @@ def klines_to_dataframe(klines):
         'taker_buy_base_asset_volume', 'taker_buy_quote_asset_volume', 'ignore'
     ])
 
-    df['open_time'] = pd.to_datetime(df['open_time'], unit='ms', errors='coerce')
-    df = df.set_index('open_time')
-    df['close_time'] = pd.to_datetime(df['close_time'], unit='ms', errors='coerce')
+    df['open_time'] = pd.to_datetime(df['open_time'], unit='ms')
+    df['close_time'] = pd.to_datetime(df['close_time'], unit='ms')
 
     for col in ['open', 'high', 'low', 'close', 'volume', 'quote_asset_volume',
                 'taker_buy_base_asset_volume', 'taker_buy_quote_asset_volume']:
         df[col] = pd.to_numeric(df[col], errors='coerce')
 
-    df = df.dropna() # 不正な値を含む行を削除
-
+    df = df.dropna()  # 不正な値を含む行を削除
+    return df
     return df

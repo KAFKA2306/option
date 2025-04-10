@@ -16,23 +16,24 @@ def calculate_basis(spot_df=None, futures_df=None, interval=Client.KLINE_INTERVA
         return None
 
     # マージ前にタイムスタンプ列名を統一し、存在と型を確認
-    for df, name in [(spot_df, "spot_df"), (futures_df, "futures_df")]:
-        if 'open_time' not in df.columns:
-            print(f"Error: '{name}' に 'open_time' 列が存在しません。")
-            return None
-        if not pd.api.types.is_datetime64_any_dtype(df['open_time']):
-            print(f"Error: '{name}' の 'open_time' 列が datetime 型ではありません。")
-            return None
-        df['datetime'] = df.index
+    #for df, name in [(spot_df, "spot_df"), (futures_df, "futures_df")]:
+    #    if 'open_time' not in df.columns:
+    #        print(f"Error: '{name}' に 'open_time' 列が存在しません。")
+    #        return None
+    #    if not pd.api.types.is_datetime64_any_dtype(df['open_time']):
+    #        print(f"Error: '{name}' の 'open_time' 列が datetime 型ではありません。")
+    #        return None
+    #    df['datetime'] = df.index
 
     merged_df = spot_df[['close']].rename(columns={'close': 'spot_close'})
     merged_df['futures_close'] = futures_df['close']
     # 日時でマージして価格差を計算 (indexを使用)
     merged_df = pd.merge(
-        #spot_df[['datetime', 'close']].rename(columns={'close': 'spot_close'}),
-        #futures_df[['datetime', 'close']].rename(columns={'close': 'futures_close'}),
-        #on='datetime',
-        #how='inner'  # 両方に存在する日時のみを対象とする
+        spot_df[['close']].rename(columns={'close': 'spot_close'}),
+        futures_df[['close']].rename(columns={'close': 'futures_close'}),
+        left_index=True,
+        right_index=True,
+        how='inner'  # 両方に存在する日時のみを対象とする
     )
 
     if merged_df.empty:
@@ -69,15 +70,16 @@ def analyze_basis(basis_df=None, interval=Client.KLINE_INTERVAL_1HOUR):
         ma_period = 12  # デフォルト
 
     # インデックスがdatetime型であることを確認し、必要に応じて設定・ソート
-    #if not pd.api.types.is_datetime64_any_dtype(basis_df.index):
-    #    print("Warning: DataFrameのインデックスがdatetime型ではありません。設定を試みます。")
-    #    try:
-    #        basis_df['datetime'] = pd.to_datetime(basis_df['datetime'])
-    #        basis_df = basis_df.set_index('datetime').sort_index()
-    #        print("インデックスをdatetime型に設定し、ソートしました。")
-    #    except Exception as e:
-    #        print(f"Error: datetime型への変換またはインデックス設定に失敗しました: {e}")
-    #        return None, None
+    if not pd.api.types.is_datetime64_any_dtype(basis_df.index):
+        print("Warning: DataFrameのインデックスがdatetime型ではありません。設定を試みます。")
+        try:
+            basis_df = basis_df.set_index('datetime')
+            basis_df.index = pd.to_datetime(basis_df.index)
+            basis_df = basis_df.sort_index()
+            print("インデックスをdatetime型に設定し、ソートしました。")
+        except Exception as e:
+            print(f"Error: datetime型への変換またはインデックス設定に失敗しました: {e}")
+            return None, None
 
     if 'basis' in basis_df.columns and 'basis_percent' in basis_df.columns:
         basis_df[f'basis_ma{ma_period}'] = basis_df['basis'].rolling(ma_period).mean()
