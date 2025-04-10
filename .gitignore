@@ -1,0 +1,6 @@
+*.parquet
+*.png
+*M:\ML\Finance\option\.venv*
+*.venv*
+*output*
+*pyc

@@ -1,0 +1,5 @@
+QuantLib
+pygwalker
+pandas
+fastparquet
+yfinance
