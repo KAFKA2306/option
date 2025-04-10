@@ -4,6 +4,9 @@ from data_loader import fetch_and_save_data, client # clientもインポート
 from analysis import calculate_basis, analyze_basis
 from plot import plot_and_save_data
 from config import create_output_directories
+import datetime
+# Import the report generator function
+from reportgenerator import generate_html_report
 
 def run_pipeline(interval):
     """指定された時間間隔でデータ取得からプロットまでを実行する関数"""
@@ -57,6 +60,16 @@ def main():
     run_pipeline(Client.KLINE_INTERVAL_1DAY)
 
     print("\n--- 全ての処理が完了しました ---")
+
+    # Generate the HTML report after all pipelines are complete
+    print("\n--- HTMLレポートを生成中... ---")
+    try:
+        html_file_path = generate_html_report()
+        # Optionally open the report in a web browser
+        import webbrowser
+        webbrowser.open('file://' + os.path.abspath(html_file_path))
+    except Exception as e:
+        print(f"Error generating HTML report: {e}")
 
 if __name__ == "__main__":
     main()
