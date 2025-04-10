@@ -66,8 +66,8 @@ def main():
     try:
         html_file_path = generate_html_report()
         # Optionally open the report in a web browser
-        import webbrowser
-        webbrowser.open('file://' + os.path.abspath(html_file_path))
+        #import webbrowser
+        #webbrowser.open('file://' + os.path.abspath(html_file_path))
     except Exception as e:
         print(f"Error generating HTML report: {e}")
 
