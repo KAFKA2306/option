@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 from jinja2 import Template
 from binance.client import Client
 
-from config import OUTPUT_DIR, ANALYSIS_OUTPUT_DIR
+from config import OUTPUT_DIR, ANALYSIS_OUTPUT_DIR, BASE_DIR
 from utils import load_data
 
 def generate_html_report(intervals=[Client.KLINE_INTERVAL_1HOUR, Client.KLINE_INTERVAL_1DAY]):
@@ -18,9 +18,9 @@ def generate_html_report(intervals=[Client.KLINE_INTERVAL_1HOUR, Client.KLINE_IN
     intervals : list
         レポートを生成する時間間隔のリスト
     """
-    # HTMLファイルの保存先
-    report_dir = os.path.join(OUTPUT_DIR, "reports")
-    os.makedirs(report_dir, exist_ok=True)
+    # HTMLファイルの保存先をBASE_DIRに変更
+    # report_dir = os.path.join(OUTPUT_DIR, "reports") # 旧パス
+    # os.makedirs(report_dir, exist_ok=True) # 不要になる
     
     # 現在の日時
     now = datetime.datetime.now()
@@ -33,32 +33,34 @@ def generate_html_report(intervals=[Client.KLINE_INTERVAL_1HOUR, Client.KLINE_IN
         interval_str = interval.replace('m', 'min').replace('h', 'hour').replace('d', 'day').replace('w', 'week')
         
         # 統計データの読み込み
-        stats_df = load_data("analysis", f"basis_statistics_{interval_str}")
+        stats_file = f"basis_statistics_{interval_str}"
+        stats_df = load_data("analysis", stats_file)
         if stats_df is None:
-            print(f"Warning: Statistics data for {interval_str} not found.")
+            print(f"Warning: Statistics data file '{stats_file}.parquet' not found.")
             continue
             
         # 分析データの読み込み
-        analysis_df = load_data("analysis", f"basis_with_ma_{interval_str}")
+        analysis_file = f"basis_with_ma_{interval_str}"
+        analysis_df = load_data("analysis", analysis_file)
         if analysis_df is None:
-            print(f"Warning: Analysis data for {interval_str} not found.")
+            print(f"Warning: Analysis data file '{analysis_file}.parquet' not found.")
             continue
         
         # 期間の情報
         start_date = analysis_df.index.min().strftime("%Y年%m月%d日")
         end_date = analysis_df.index.max().strftime("%Y年%m月%d日")
         
-        # グラフのパス
-        basis_plot_path = f"plots/basis_analysis_{interval_str}.png"
-        price_plot_path = f"plots/price_comparison_{interval_str}.png"
-        volume_plot_path = f"plots/volume_{interval_str}.png"
-        price_volume_plot_path = f"plots/price_volume_{interval_str}.png"
+        # グラフのパス (相対パスに変更)
+        basis_plot_path = os.path.join("output", "plots", f"basis_analysis_{interval_str}.png")
+        price_plot_path = os.path.join("output", "plots", f"price_comparison_{interval_str}.png")
+        volume_plot_path = os.path.join("output", "plots", f"volume_{interval_str}.png")
+        price_volume_plot_path = os.path.join("output", "plots", f"price_volume_{interval_str}.png")
         
         # 直近の値を取得
         latest_data = analysis_df.iloc[-1].to_dict()
         
         # 統計量の整形
-        stats_html = stats_df.to_html(classes="table table-striped", border=0)
+        stats_html = stats_df.to_html(classes="table table-striped table-sm", border=0, float_format='{:.5f}'.format)
         
         # 分析コメントの生成
         analysis_comment = generate_analysis_comment(stats_df, analysis_df, interval)
@@ -85,8 +87,8 @@ def generate_html_report(intervals=[Client.KLINE_INTERVAL_1HOUR, Client.KLINE_IN
         report_data=report_data
     )
     
-    # HTMLファイルの保存
-    html_file_path = os.path.join(report_dir, "index.html")
+    # HTMLファイルの保存パスをBASE_DIR直下に変更
+    html_file_path = os.path.join(BASE_DIR, "index.html")
     with open(html_file_path, "w", encoding="utf-8") as f:
         f.write(html_content)
     
