@@ -7,3 +7,5 @@ python-binance
 pyarrow
 matplotlib
 jinja2
+numpy
+scikit-learn
