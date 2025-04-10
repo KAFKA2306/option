@@ -1,9 +1,10 @@
 import os
+import numpy as np
 import pandas as pd
-from src.utils import save_data, load_data # align_timestamps is not needed anymore
-from src.config import ANALYSIS_OUTPUT_DIR
+from utils import save_data, load_data # align_timestamps is not needed anymore
+from config import ANALYSIS_OUTPUT_DIR
 # Import the advanced analyzer
-from src.advanced_analysis import BitcoinBasisAnalyzer
+from advanced_analysis import BitcoinBasisAnalyzer
 
 def run_advanced_analysis(spot_df, futures_df, interval):
     """Runs the advanced basis analysis using BitcoinBasisAnalyzer."""
@@ -38,7 +39,7 @@ def run_advanced_analysis(spot_df, futures_df, interval):
 
         # Calculate statistics from the resulting DataFrame
         # Select only numeric columns for describe()
-        numeric_cols = analysis_df.select_dtypes(include=pd.np.number).columns.tolist()
+        numeric_cols = analysis_df.select_dtypes(include='number').columns.tolist()
         if not numeric_cols:
              print("Warning: No numeric columns found for statistics calculation.")
              stats_df = pd.DataFrame() # Return empty DataFrame
