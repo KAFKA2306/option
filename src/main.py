@@ -1,14 +1,14 @@
 import os
 from binance.client import Client
-from src.data_loader import fetch_and_save_data
+from data_loader import fetch_and_save_data
 # Import the new advanced analysis function
-from src.analysis import run_advanced_analysis
+from analysis import run_advanced_analysis
 # Keep plot import, but comment out the call for now
-# from src.plot import plot_and_save_data
-from src.config import create_output_directories
+# from plot import plot_and_save_data
+from config import create_output_directories
 import datetime
 # Import the report generator function (ensure correct filename)
-from src.reportgenerator import generate_html_report # Corrected import path
+from reportgenerator import generate_html_report # Corrected import path
 import webbrowser
 
 def run_pipeline(interval):

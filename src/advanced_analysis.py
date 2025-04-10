@@ -7,7 +7,7 @@ from sklearn.preprocessing import StandardScaler
 import japanize_matplotlib
 import warnings
 import os
-from src.config import OUTPUT_DIR
+from config import OUTPUT_DIR
 
 warnings.filterwarnings('ignore')
 
