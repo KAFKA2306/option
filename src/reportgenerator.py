@@ -6,8 +6,8 @@ from jinja2 import Template
 from binance.client import Client
 import numpy as np
 
-from src.config import OUTPUT_DIR, ANALYSIS_OUTPUT_DIR, BASE_DIR
-from src.utils import load_data
+from config import OUTPUT_DIR, ANALYSIS_OUTPUT_DIR, BASE_DIR
+from utils import load_data
 
 # --- Helper Function for Formatting Stats ---
 def format_stats_df(df):

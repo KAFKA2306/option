@@ -1,0 +1,59 @@
+[1mdiff --git a/README.md b/README.md[m
+[1mindex cc75a88..643ec39 100644[m
+[1m--- a/README.md[m
+[1m+++ b/README.md[m
+[36m@@ -1,24 +1,37 @@[m
+ # Finance Option Project[m
+ [m
+[31m- ## Overview[m
+[32m+[m[32m## Overview[m[41m[m
+ [m
+[31m- This project analyzes the basis between spot and futures prices of Bitcoin (BTC) using data from the Binance API. It calculates the basis, analyzes the data, and provides statistics.[m
+[32m+[m[32mThis project analyzes the basis between spot and futures prices of Bitcoin (BTC) using data from the Binance API. It calculates the basis, analyzes the data, generates plots, and produces an HTML analysis report.[m[41m[m
+ [m
+[31m- ## Dependencies[m
+[32m+[m[32m**View the latest analysis report:** [https://KAFKA2306.github.io/option/](https://KAFKA2306.github.io/option/)[m[41m[m
+ [m
+[31m- *   pandas[m
+[31m- *   python-binance[m
+[31m- *   pyarrow[m
+[32m+[m[32m## Dependencies[m[41m[m
+ [m
+[31m- ## Usage[m
+[32m+[m[32m*   pandas[m[41m[m
+[32m+[m[32m*   python-binance[m[41m[m
+[32m+[m[32m*   pyarrow[m[41m[m
+[32m+[m[32m*   matplotlib[m[41m[m
+[32m+[m[32m*   jinja2[m[41m[m
+ [m
+[31m- 1.  Set the environment variables `BINANCE_API_KEY` and `BINANCE_API_SECRET`.[m
+[31m- 2.  Run `src/main.py` to collect and analyze data.[m
+[32m+[m[32mInstall dependencies using:[m[41m[m
+[32m+[m[32m```bash[m[41m[m
+[32m+[m[32mpip install -r requirements.txt[m[41m[m
+[32m+[m[32m```[m[41m[m
+ [m
+[31m- ## Files[m
+[32m+[m[32m## Usage[m[41m[m
+ [m
+[31m- *   `src/main.py`: Main script to run the analysis.[m
+[31m- *   `src/analysis.py`: Contains functions to calculate and analyze the basis between spot and futures prices.[m
+[31m- *   `src/binance_data.py`: Contains functions to retrieve historical data from the Binance API.[m
+[31m- *   `src/utils.py`: Contains utility functions for saving and loading data.[m
+[31m- *   `src/config.py`: Contains configuration settings for the project.[m
+\ No newline at end of file[m
+[32m+[m[32m1.  Set the environment variables `BINANCE_API_KEY` and `BINANCE_API_SECRET`.[m[41m[m
+[32m+[m[32m2.  Run `python src/main.py` to collect data, perform analysis, generate plots, and create the `index.html` report in the project root directory.[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m## Files[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m*   `src/main.py`: Main script to run the entire pipeline.[m[41m[m
+[32m+[m[32m*   `src/data_loader.py`: Fetches and saves spot and futures data from Binance.[m[41m[m
+[32m+[m[32m*   `src/analysis.py`: Calculates basis, performs statistical analysis, and calculates moving averages.[m[41m[m
+[32m+[m[32m*   `src/plot.py`: Generates various plots based on the analysis data.[m[41m[m
+[32m+[m[32m*   `src/reportgenerator.py`: Generates the final HTML analysis report (`index.html`).[m[41m[m
+[32m+[m[32m*   `src/utils.py`: Utility functions for saving and loading data (Parquet format).[m[41m[m
+[32m+[m[32m*   `src/config.py`: Configuration settings (e.g., directory paths).[m[41m[m
+[32m+[m[32m*   `index.html`: The generated HTML analysis report (in the project root).[m[41m[m
+[32m+[m[32m*   `output/`: Directory containing generated data and plots (ignored by Git by default, except for plots which are tracked).[m
+\ No newline at end of file[m

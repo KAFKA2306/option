@@ -5,31 +5,71 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>ビットコイン先物ベーシス高度分析レポート</title>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
         <style>
-            body { font-family: 'Hiragino Sans', 'Yu Gothic', 'Meiryo', sans-serif; line-height: 1.6; padding: 20px; }
-            .container { max-width: 1200px; margin: 0 auto; }
-            .header { background-color: #f8f9fa; padding: 20px; margin-bottom: 30px; border-radius: 5px; border-left: 5px solid #007bff; }
-            .section { margin-bottom: 40px; padding: 20px; background-color: #fff; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-            .plot-container { text-align: center; margin-bottom: 30px;}
-            .plot-image { max-width: 100%; height: auto; margin: 10px 0; border: 1px solid #ddd; border-radius: 5px; }
-            h2 { color: #007bff; border-bottom: 2px solid #007bff; padding-bottom: 10px; margin-bottom: 20px; }
-            h3 { color: #0056b3; margin-top: 30px; margin-bottom: 15px; }
-            .latest-data-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; background-color: #e9f7fe; padding: 15px; border-radius: 5px; margin-bottom: 20px;}
-            .latest-data-item { font-size: 0.9em;}
-            .footer { text-align: center; margin-top: 50px; padding: 20px; font-size: 0.9em; color: #6c757d; }
-            .table-sm { font-size: 0.85rem; } /* Make table smaller */
-            .comment-section { background-color: #f8f9fa; padding: 15px; border-radius: 5px; margin-top: 20px; }
+            body { font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'Meiryo', sans-serif; line-height: 1.6; padding: 20px; background-color: #f0f2f5; }
+            .container { max-width: 1200px; margin: 1rem auto; background-color: #fff; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+            .header { background-color: #e3f2fd; padding: 1.5rem; margin-bottom: 2rem; border-radius: 5px; border-left: 5px solid #0d6efd; }
+            .header h1 { color: #0a58ca; }
+            .section { margin-bottom: 2.5rem; padding-top: 1rem; }
+            .plot-container { text-align: center; margin-bottom: 1.5rem; padding: 1rem; background-color: #f8f9fa; border-radius: 5px; }
+            .plot-image { max-width: 100%; height: auto; margin: 0.5rem 0; border: 1px solid #dee2e6; border-radius: 5px; }
+            h2 { color: #0d6efd; border-bottom: 2px solid #0d6efd; padding-bottom: 0.6rem; margin-bottom: 1.5rem; margin-top: 1rem; }
+            h3 { color: #0a58ca; margin-top: 2rem; margin-bottom: 1rem; font-weight: 600; }
+            h4.graph-title { background-color: #f5f5f5; padding: 8px 12px; border-left: 4px solid #0d6efd; margin-top: 1.5rem; margin-bottom: 1rem; display: inline-block; border-radius: 3px; font-weight: bold; font-size: 1.1rem; }
+            .latest-data-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; background-color: #e9f7fe; padding: 1rem; border-radius: 5px; margin-bottom: 1.5rem; border: 1px solid #bde0fe;}
+            .latest-data-item { font-size: 0.9em; padding: 0.5rem; background-color: #fff; border-radius: 3px; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+            .latest-data-item strong { color: #0a58ca; }
+            .footer { text-align: center; margin-top: 3rem; padding: 1.5rem; font-size: 0.9em; color: #6c757d; border-top: 1px solid #dee2e6; }
+            .table-sm { font-size: 0.85rem; }
+            .table-responsive { margin-top: 1rem; }
+            .comment-section { background-color: #f8f9fa; padding: 1.5rem; border-radius: 5px; margin-top: 1.5rem; border: 1px solid #eee;}
+            .comment-section h5 { margin-top: 0.5rem; color: #495057; font-weight: bold; }
+            .comment-section ul { padding-left: 1.2rem; }
+            .text-danger { color: #dc3545 !important; }
+            .text-success { color: #198754 !important; }
+            #toc { margin-bottom: 2rem; padding: 1rem; background-color: #f8f9fa; border-radius: 5px; }
+            #toc ul { padding-left: 0; list-style: none; }
+            #toc li a { text-decoration: none; color: #0d6efd; }
+            #toc li a:hover { text-decoration: underline; }
+
+            /* Responsive table */
+            @media (max-width: 768px) {
+                .table-responsive {
+                    overflow-x: auto; /* Enable horizontal scroll */
+                    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+                }
+                /* Ensure table itself doesn't shrink columns too much */
+                .table-responsive > .table {
+                   /* white-space: nowrap; /* Prevent text wrapping if needed */
+                   /* Optional: min-width ensures table content dictates width */
+                   min-width: 600px; /* Adjust as needed */
+                }
+                .latest-data-grid { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); } /* Adjust grid for smaller screens */
+            }
         </style>
     </head>
     <body>
         <div class="container">
             <div class="header">
                 <h1>ビットコイン先物ベーシス高度分析レポート</h1>
-                <p>生成日時: 2025年04月11日 01:48:59</p>
+                <p><strong>最終更新日時:</strong> 2025年04月11日 02:01:50 JST</p>
             </div>
-            
-            <div class="section">
+
+            <nav id="toc">
+                <h5>目次</h5>
+                <ul>
+                    <li><a href="#summary">要約</a></li>
+                    
+                    <li><a href="#analysis-1hour">1hour 分析</a></li>
+                    
+                    <li><a href="#analysis-1day">1day 分析</a></li>
+                    
+                    <li><a href="#glossary">用語集</a></li>
+                </ul>
+            </nav>
+
+            <div class="section" id="summary">
                 <h2>要約</h2>
                 <p>このレポートは、ビットコイン現物価格と先物価格の差（ベーシス）について、基本的な指標に加え、年率換算ベーシス、Zスコア、市場レジームなどの高度な分析を提供します。これにより、市場の状況をより深く理解し、投資戦略立案に役立てることを目的とします。</p>
                 
@@ -39,41 +79,41 @@
                     <li><strong>1hour:</strong>
                         平均ベーシス: N/Aドル
                         (N/A%),
-                        直近Zスコア: 1.17,
+                        直近Zスコア: 0.34,
                         現レジーム: 不明
                     </li>
                     
                     <li><strong>1day:</strong>
                         平均ベーシス: N/Aドル
                         (N/A%),
-                        直近Zスコア: -1.56,
+                        直近Zスコア: -1.25,
                         現レジーム: 不明
                     </li>
                     
                 </ul>
                 
             </div>
+
             
-            
-            <div class="section">
+            <div class="section" id="analysis-1hour">
                 <h2>1hour 分析</h2>
-                <p><strong>期間:</strong> 2025年02月28日 から 2025年04月10日 まで</p>
-                
+                <p><strong>分析期間:</strong> 2025年02月28日 から 2025年04月10日 まで (42日間)</p>
+
                 <h3>最新の主要指標</h3>
                 <div class="latest-data-grid">
-                    <div class="latest-data-item"><strong>現物価格:</strong> 79300.26 $</div>
-                    <div class="latest-data-item"><strong>先物価格:</strong> 79272.60 $</div>
-                    <div class="latest-data-item"><strong>ベーシス:</strong> -27.66 $</div>
-                    <div class="latest-data-item"><strong>ベーシス率:</strong> -0.0349 %</div>
-                    <div class="latest-data-item"><strong>年率換算ベーシス:</strong> -0.4244 %</div>
-                    <div class="latest-data-item"><strong>ベーシスZスコア:</strong> 1.17</div>
+                    <div class="latest-data-item"><strong>現物価格:</strong> 79,329.11 $</div>
+                    <div class="latest-data-item"><strong>先物価格:</strong> 79,294.40 $</div>
+                    <div class="latest-data-item"><strong>ベーシス:</strong> -34.71 $</div>
+                    <div class="latest-data-item"><strong>ベーシス率:</strong> -0.0438%</div>
+                    <div class="latest-data-item"><strong>年率換算ベーシス:</strong> -0.5323%</div>
+                    <div class="latest-data-item"><strong>ベーシスZスコア:</strong> 0.34</div>
                     <div class="latest-data-item"><strong>市場レジーム:</strong> 不明</div>
-                    <div class="latest-data-item"><strong>ボラティリティ調整済ベーシス:</strong> -0.17</div>
+                    <div class="latest-data-item"><strong>ボラティリティ調整済ベーシス:</strong> -0.22</div>
                 </div>
-                
+
                 <h3>統計分析サマリー</h3>
                 <div class="table-responsive">
-                    <table class="dataframe table table-striped table-sm">
+                    <table class="dataframe table table-bordered table-striped table-sm table-hover">
   <thead>
     <tr style="text-align: right;">
       <th></th>
@@ -88,165 +128,180 @@
       <th>vol_adjusted_basis</th>
       <th>market_regime</th>
     </tr>
+    <tr>
+      <th>指標</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
   </thead>
   <tbody>
     <tr>
       <th>count</th>
-      <td>1000.00000</td>
-      <td>1000.00000</td>
-      <td>1000.00000</td>
-      <td>1000.00000</td>
-      <td>1000.00000</td>
-      <td>971.00000</td>
-      <td>986.00000</td>
-      <td>970.00000</td>
-      <td>970.00000</td>
-      <td>1000.00000</td>
+      <td>1,000.00</td>
+      <td>1,000.00</td>
+      <td>1,000.00</td>
+      <td>1000.0000%</td>
+      <td>1000.0000%</td>
+      <td>971.00</td>
+      <td>986.00</td>
+      <td>970.00</td>
+      <td>970.00</td>
+      <td>1000.00</td>
     </tr>
     <tr>
       <th>mean</th>
-      <td>84183.85228</td>
-      <td>84143.39330</td>
-      <td>-40.45898</td>
-      <td>-0.04800</td>
-      <td>-0.58405</td>
-      <td>0.01291</td>
-      <td>-0.15449</td>
-      <td>0.09756</td>
-      <td>-0.64912</td>
-      <td>1.00000</td>
+      <td>84,181.67</td>
+      <td>84,141.21</td>
+      <td>-40.46</td>
+      <td>-0.0480%</td>
+      <td>-0.5841%</td>
+      <td>0.01</td>
+      <td>-0.15</td>
+      <td>0.10</td>
+      <td>-0.65</td>
+      <td>1.00</td>
     </tr>
     <tr>
       <th>std</th>
-      <td>3140.28587</td>
-      <td>3137.54777</td>
-      <td>8.43650</td>
-      <td>0.00952</td>
-      <td>0.11578</td>
-      <td>0.99561</td>
-      <td>4.74589</td>
-      <td>0.05218</td>
-      <td>0.39798</td>
-      <td>0.81281</td>
+      <td>3,142.79</td>
+      <td>3,140.07</td>
+      <td>8.42</td>
+      <td>0.0095%</td>
+      <td>0.1155%</td>
+      <td>1.00</td>
+      <td>4.75</td>
+      <td>0.05</td>
+      <td>0.40</td>
+      <td>0.81</td>
     </tr>
     <tr>
       <th>min</th>
-      <td>74810.01000</td>
-      <td>74781.40000</td>
-      <td>-114.10000</td>
-      <td>-0.12686</td>
-      <td>-1.54351</td>
-      <td>-4.51196</td>
-      <td>-40.13196</td>
-      <td>0.01917</td>
-      <td>-3.09612</td>
-      <td>0.00000</td>
+      <td>74,810.01</td>
+      <td>74,781.40</td>
+      <td>-114.10</td>
+      <td>-0.1269%</td>
+      <td>-1.5435%</td>
+      <td>-4.51</td>
+      <td>-40.13</td>
+      <td>0.02</td>
+      <td>-3.10</td>
+      <td>0.00</td>
     </tr>
     <tr>
-      <th>25%</th>
-      <td>82611.09000</td>
-      <td>82572.87500</td>
-      <td>-45.74750</td>
-      <td>-0.05403</td>
-      <td>-0.65738</td>
-      <td>-0.66988</td>
-      <td>0.13507</td>
-      <td>0.05784</td>
-      <td>-0.83642</td>
-      <td>0.00000</td>
+      <th>25th Pct</th>
+      <td>82,611.09</td>
+      <td>82,572.88</td>
+      <td>-45.75</td>
+      <td>-0.0540%</td>
+      <td>-0.6574%</td>
+      <td>-0.68</td>
+      <td>0.14</td>
+      <td>0.06</td>
+      <td>-0.84</td>
+      <td>0.00</td>
     </tr>
     <tr>
-      <th>50%</th>
-      <td>83998.95000</td>
-      <td>83954.90000</td>
-      <td>-40.00000</td>
-      <td>-0.04751</td>
-      <td>-0.57798</td>
-      <td>0.01599</td>
-      <td>0.36856</td>
-      <td>0.07940</td>
-      <td>-0.58901</td>
-      <td>1.00000</td>
+      <th>Median (50th Pct)</th>
+      <td>83,998.95</td>
+      <td>83,954.90</td>
+      <td>-40.00</td>
+      <td>-0.0475%</td>
+      <td>-0.5780%</td>
+      <td>0.02</td>
+      <td>0.37</td>
+      <td>0.08</td>
+      <td>-0.59</td>
+      <td>1.00</td>
     </tr>
     <tr>
-      <th>75%</th>
-      <td>86044.62250</td>
-      <td>86006.10000</td>
-      <td>-35.18750</td>
-      <td>-0.04205</td>
-      <td>-0.51163</td>
-      <td>0.67232</td>
-      <td>0.61363</td>
-      <td>0.12323</td>
-      <td>-0.35598</td>
-      <td>2.00000</td>
+      <th>75th Pct</th>
+      <td>86,044.62</td>
+      <td>86,006.10</td>
+      <td>-35.19</td>
+      <td>-0.0421%</td>
+      <td>-0.5123%</td>
+      <td>0.67</td>
+      <td>0.61</td>
+      <td>0.12</td>
+      <td>-0.36</td>
+      <td>2.00</td>
     </tr>
     <tr>
       <th>max</th>
-      <td>94330.00000</td>
-      <td>94270.00000</td>
-      <td>1.27000</td>
-      <td>0.00152</td>
-      <td>0.01848</td>
-      <td>3.92721</td>
-      <td>1.99971</td>
-      <td>0.27203</td>
-      <td>0.01985</td>
-      <td>2.00000</td>
+      <td>94,330.00</td>
+      <td>94,270.00</td>
+      <td>1.27</td>
+      <td>0.0015%</td>
+      <td>0.0185%</td>
+      <td>3.93</td>
+      <td>2.00</td>
+      <td>0.27</td>
+      <td>0.02</td>
+      <td>2.00</td>
     </tr>
   </tbody>
 </table>
                 </div>
-                
+
                 <h3>グラフ分析</h3>
-                <h4>高度ベーシス分析</h4>
+                <h4 class="graph-title">高度ベーシス分析</h4>
                 <div class="plot-container">
                     <img src="output\plots\advanced_basis_analysis_1hour.png" alt="高度ベーシス分析グラフ" class="plot-image">
                 </div>
-                <h4>戦略パフォーマンス</h4>
+                <h4 class="graph-title">戦略パフォーマンス</h4>
                 <div class="plot-container">
                     <img src="output\plots\strategy_performance_1hour.png" alt="戦略パフォーマンスグラフ" class="plot-image">
                 </div>
-                 <!-- Comment out or remove old plot sections -->
-                 <!--
-                 <div class="row">
-                     <div class="col-md-6 plot-container">
-                         <img src="" alt="価格比較グラフ" class="plot-image">
-                     </div>
-                     <div class="col-md-6 plot-container">
-                         <img src="" alt="取引量グラフ" class="plot-image">
-                     </div>
-                 </div>
-                 <div class="plot-container">
-                      <img src="" alt="価格と取引量グラフ" class="plot-image">
-                 </div>
-                 -->
 
                 <h3>分析コメント</h3>
                 <div class="comment-section">
-                    <h4>ビットコイン先物ベーシス分析（1時間）</h4>\n<p>分析期間: 2025年02月28日 - 2025年04月10日</p>\n<h5>市場概況</h5>\n<p>期間中の市場は平均的に<strong>バックワーデーション（先物 < 現物）</strong>の状態でした。\n平均ベーシス: -40.46ドル (-0.0480%)\n直近の年率換算ベーシス: -0.42%\n標準偏差: 8.44ドル</p>\n<h5>最新の状況と市場レジーム</h5>\n<p>最新ベーシス: -27.66ドル (-0.0349%)\n現在の市場レジーム: <strong>強いコンタンゴ</strong>\nベーシスZスコア: 1.17 (平常範囲内)\n</p>\n<h5>投資戦略への示唆</h5>\n<p>平均的なバックワーデーションは、市場参加者の短期的な弱気心理や現物需要の強さを示唆します。\nアービトラージ戦略としては「先物買い・現物売り」が考えられますが、\n現在のZスコアは必ずしもこの戦略が有利とは限りません。\n</p>
+                    <h4>ビットコイン先物ベーシス分析（1時間）</h4>
+<p><strong>分析期間:</strong> 2025年02月28日 - 2025年04月10日 (42日間)</p>
+<h5>市場概況</h5>
+<p>期間中の市場は平均的に<strong>バックワーデーション（先物 < 現物）</strong>の状態でした。
+<ul><li>平均ベーシス: -40.46ドル (-0.0480%)</li>
+<li>平均年率換算ベーシス: -0.58%</li>
+<li>ベーシスの標準偏差: 8.42ドル</li></ul></p>
+<h5>最新の状況、市場レジーム、Zスコア</h5>
+<p>最新の状況は以下の通りです:
+<ul><li>最新ベーシス: -34.71ドル (-0.0438%)</li>
+<li>最新年率換算ベーシス: -0.53%</li>
+<li>市場レジーム: <strong>強いコンタンゴ</strong></li>
+<li>ベーシスZスコア: 0.34 (平均比 0.3σ) (平常範囲内)</li>
+</ul></p>
+<h5>投資戦略への示唆</h5>
+<p>現在の市場状況 (バックワーデーション) とZスコア (0.34) を考慮すると、
+統計的にはアービトラージ戦略（先物買い・現物売り）が 現時点では必ずしも有利とは言えません。 Zスコアが閾値 (±2.0) を超えているかどうかが判断材料の一つとなります。</p>
                 </div>
             </div>
             
-            <div class="section">
+            <div class="section" id="analysis-1day">
                 <h2>1day 分析</h2>
-                <p><strong>期間:</strong> 2022年07月16日 から 2025年04月10日 まで</p>
-                
+                <p><strong>分析期間:</strong> 2022年07月16日 から 2025年04月10日 まで (1000日間)</p>
+
                 <h3>最新の主要指標</h3>
                 <div class="latest-data-grid">
-                    <div class="latest-data-item"><strong>現物価格:</strong> 79290.01 $</div>
-                    <div class="latest-data-item"><strong>先物価格:</strong> 79245.90 $</div>
-                    <div class="latest-data-item"><strong>ベーシス:</strong> -44.11 $</div>
-                    <div class="latest-data-item"><strong>ベーシス率:</strong> -0.0556 %</div>
-                    <div class="latest-data-item"><strong>年率換算ベーシス:</strong> -0.6768 %</div>
-                    <div class="latest-data-item"><strong>ベーシスZスコア:</strong> -1.56</div>
+                    <div class="latest-data-item"><strong>現物価格:</strong> 79,332.00 $</div>
+                    <div class="latest-data-item"><strong>先物価格:</strong> 79,290.10 $</div>
+                    <div class="latest-data-item"><strong>ベーシス:</strong> -41.90 $</div>
+                    <div class="latest-data-item"><strong>ベーシス率:</strong> -0.0528%</div>
+                    <div class="latest-data-item"><strong>年率換算ベーシス:</strong> -0.6426%</div>
+                    <div class="latest-data-item"><strong>ベーシスZスコア:</strong> -1.25</div>
                     <div class="latest-data-item"><strong>市場レジーム:</strong> 不明</div>
-                    <div class="latest-data-item"><strong>ボラティリティ調整済ベーシス:</strong> -0.12</div>
+                    <div class="latest-data-item"><strong>ボラティリティ調整済ベーシス:</strong> -0.11</div>
                 </div>
-                
+
                 <h3>統計分析サマリー</h3>
                 <div class="table-responsive">
-                    <table class="dataframe table table-striped table-sm">
+                    <table class="dataframe table table-bordered table-striped table-sm table-hover">
   <thead>
     <tr style="text-align: right;">
       <th></th>
@@ -261,153 +316,185 @@
       <th>vol_adjusted_basis</th>
       <th>market_regime</th>
     </tr>
+    <tr>
+      <th>指標</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
   </thead>
   <tbody>
     <tr>
       <th>count</th>
-      <td>1000.00000</td>
-      <td>1000.00000</td>
-      <td>1000.00000</td>
-      <td>1000.00000</td>
-      <td>1000.00000</td>
-      <td>971.00000</td>
-      <td>986.00000</td>
-      <td>970.00000</td>
-      <td>970.00000</td>
-      <td>1000.00000</td>
+      <td>1,000.00</td>
+      <td>1,000.00</td>
+      <td>1,000.00</td>
+      <td>1000.0000%</td>
+      <td>1000.0000%</td>
+      <td>971.00</td>
+      <td>986.00</td>
+      <td>970.00</td>
+      <td>970.00</td>
+      <td>1000.00</td>
     </tr>
     <tr>
       <th>mean</th>
-      <td>47205.10800</td>
-      <td>47196.48000</td>
-      <td>-8.62800</td>
-      <td>-0.02408</td>
-      <td>-0.29294</td>
-      <td>0.01725</td>
-      <td>-3.93643</td>
-      <td>0.40071</td>
-      <td>-0.07033</td>
-      <td>1.00000</td>
+      <td>47,205.15</td>
+      <td>47,196.52</td>
+      <td>-8.63</td>
+      <td>-0.0241%</td>
+      <td>-0.2929%</td>
+      <td>0.02</td>
+      <td>-3.94</td>
+      <td>0.40</td>
+      <td>-0.07</td>
+      <td>1.00</td>
     </tr>
     <tr>
       <th>std</th>
-      <td>26123.30984</td>
-      <td>26121.31720</td>
-      <td>24.57296</td>
-      <td>0.04080</td>
-      <td>0.49640</td>
-      <td>1.14890</td>
-      <td>44.10082</td>
-      <td>0.11610</td>
-      <td>0.11088</td>
-      <td>0.81281</td>
+      <td>26,123.36</td>
+      <td>26,121.37</td>
+      <td>24.57</td>
+      <td>0.0408%</td>
+      <td>0.4964%</td>
+      <td>1.15</td>
+      <td>44.10</td>
+      <td>0.12</td>
+      <td>0.11</td>
+      <td>0.81</td>
     </tr>
     <tr>
       <th>min</th>
-      <td>15781.29000</td>
-      <td>15773.00000</td>
-      <td>-62.40000</td>
-      <td>-0.11185</td>
-      <td>-1.36087</td>
-      <td>-3.67514</td>
-      <td>-364.04311</td>
-      <td>0.13859</td>
-      <td>-0.38052</td>
-      <td>0.00000</td>
+      <td>15,781.29</td>
+      <td>15,773.00</td>
+      <td>-62.40</td>
+      <td>-0.1119%</td>
+      <td>-1.3609%</td>
+      <td>-3.68</td>
+      <td>-364.04</td>
+      <td>0.14</td>
+      <td>-0.38</td>
+      <td>0.00</td>
     </tr>
     <tr>
-      <th>25%</th>
-      <td>25801.81250</td>
-      <td>25791.62500</td>
-      <td>-20.91500</td>
-      <td>-0.04946</td>
-      <td>-0.60173</td>
-      <td>-0.80324</td>
-      <td>0.17325</td>
-      <td>0.31980</td>
-      <td>-0.14099</td>
-      <td>0.00000</td>
+      <th>25th Pct</th>
+      <td>25,801.81</td>
+      <td>25,791.62</td>
+      <td>-20.91</td>
+      <td>-0.0495%</td>
+      <td>-0.6017%</td>
+      <td>-0.80</td>
+      <td>0.17</td>
+      <td>0.32</td>
+      <td>-0.14</td>
+      <td>0.00</td>
     </tr>
     <tr>
-      <th>50%</th>
-      <td>37799.77000</td>
-      <td>37789.35000</td>
-      <td>-11.53000</td>
-      <td>-0.03991</td>
-      <td>-0.48557</td>
-      <td>-0.08391</td>
-      <td>0.69522</td>
-      <td>0.38509</td>
-      <td>-0.09558</td>
-      <td>1.00000</td>
+      <th>Median (50th Pct)</th>
+      <td>37,799.77</td>
+      <td>37,789.35</td>
+      <td>-11.53</td>
+      <td>-0.0399%</td>
+      <td>-0.4856%</td>
+      <td>-0.08</td>
+      <td>0.70</td>
+      <td>0.39</td>
+      <td>-0.10</td>
+      <td>1.00</td>
     </tr>
     <tr>
-      <th>75%</th>
-      <td>66211.93750</td>
-      <td>66184.97500</td>
-      <td>-4.82000</td>
-      <td>-0.01616</td>
-      <td>-0.19667</td>
-      <td>0.76626</td>
-      <td>1.72319</td>
-      <td>0.46456</td>
-      <td>-0.04171</td>
-      <td>2.00000</td>
+      <th>75th Pct</th>
+      <td>66,211.94</td>
+      <td>66,184.98</td>
+      <td>-4.82</td>
+      <td>-0.0162%</td>
+      <td>-0.1967%</td>
+      <td>0.77</td>
+      <td>1.72</td>
+      <td>0.46</td>
+      <td>-0.04</td>
+      <td>2.00</td>
     </tr>
     <tr>
       <th>max</th>
-      <td>106143.82000</td>
-      <td>106114.50000</td>
-      <td>90.41000</td>
-      <td>0.11830</td>
-      <td>1.43936</td>
-      <td>4.24948</td>
-      <td>33.20123</td>
-      <td>0.70073</td>
-      <td>0.30335</td>
-      <td>2.00000</td>
+      <td>106,143.82</td>
+      <td>106,114.50</td>
+      <td>90.41</td>
+      <td>0.1183%</td>
+      <td>1.4394%</td>
+      <td>4.25</td>
+      <td>33.20</td>
+      <td>0.70</td>
+      <td>0.30</td>
+      <td>2.00</td>
     </tr>
   </tbody>
 </table>
                 </div>
-                
+
                 <h3>グラフ分析</h3>
-                <h4>高度ベーシス分析</h4>
+                <h4 class="graph-title">高度ベーシス分析</h4>
                 <div class="plot-container">
                     <img src="output\plots\advanced_basis_analysis_1day.png" alt="高度ベーシス分析グラフ" class="plot-image">
                 </div>
-                <h4>戦略パフォーマンス</h4>
+                <h4 class="graph-title">戦略パフォーマンス</h4>
                 <div class="plot-container">
                     <img src="output\plots\strategy_performance_1day.png" alt="戦略パフォーマンスグラフ" class="plot-image">
                 </div>
-                 <!-- Comment out or remove old plot sections -->
-                 <!--
-                 <div class="row">
-                     <div class="col-md-6 plot-container">
-                         <img src="" alt="価格比較グラフ" class="plot-image">
-                     </div>
-                     <div class="col-md-6 plot-container">
-                         <img src="" alt="取引量グラフ" class="plot-image">
-                     </div>
-                 </div>
-                 <div class="plot-container">
-                      <img src="" alt="価格と取引量グラフ" class="plot-image">
-                 </div>
-                 -->
 
                 <h3>分析コメント</h3>
                 <div class="comment-section">
-                    <h4>ビットコイン先物ベーシス分析（1日）</h4>\n<p>分析期間: 2022年07月16日 - 2025年04月10日</p>\n<h5>市場概況</h5>\n<p>期間中の市場は平均的に<strong>バックワーデーション（先物 < 現物）</strong>の状態でした。\n平均ベーシス: -8.63ドル (-0.0241%)\n直近の年率換算ベーシス: -0.68%\n標準偏差: 24.57ドル</p>\n<h5>最新の状況と市場レジーム</h5>\n<p>最新ベーシス: -44.11ドル (-0.0556%)\n現在の市場レジーム: <strong>強いバックワーデーション</strong>\nベーシスZスコア: -1.56 (平常範囲内)\n</p>\n<h5>投資戦略への示唆</h5>\n<p>平均的なバックワーデーションは、市場参加者の短期的な弱気心理や現物需要の強さを示唆します。\nアービトラージ戦略としては「先物買い・現物売り」が考えられますが、\n現在のZスコアは必ずしもこの戦略が有利とは限りません。\n</p>
+                    <h4>ビットコイン先物ベーシス分析（1日）</h4>
+<p><strong>分析期間:</strong> 2022年07月16日 - 2025年04月10日 (1000日間)</p>
+<h5>市場概況</h5>
+<p>期間中の市場は平均的に<strong>バックワーデーション（先物 < 現物）</strong>の状態でした。
+<ul><li>平均ベーシス: -8.63ドル (-0.0241%)</li>
+<li>平均年率換算ベーシス: -0.29%</li>
+<li>ベーシスの標準偏差: 24.57ドル</li></ul></p>
+<h5>最新の状況、市場レジーム、Zスコア</h5>
+<p>最新の状況は以下の通りです:
+<ul><li>最新ベーシス: -41.90ドル (-0.0528%)</li>
+<li>最新年率換算ベーシス: -0.64%</li>
+<li>市場レジーム: <strong>強いバックワーデーション</strong></li>
+<li>ベーシスZスコア: -1.25 (平均比 -1.1σ) (平常範囲内)</li>
+</ul></p>
+<h5>投資戦略への示唆</h5>
+<p>現在の市場状況 (バックワーデーション) とZスコア (-1.25) を考慮すると、
+統計的にはアービトラージ戦略（先物買い・現物売り）が 現時点では必ずしも有利とは言えません。 Zスコアが閾値 (±2.0) を超えているかどうかが判断材料の一つとなります。</p>
                 </div>
             </div>
             
-            
+
+            <div class="section" id="glossary">
+                <h2>用語集</h2>
+                <dl class="row">
+                    <dt class="col-sm-3">ベーシス</dt>
+                    <dd class="col-sm-9">先物価格と現物価格の価格差（先物価格 - 現物価格）。市場の需給、期待、キャリーコストなどを反映します。</dd>
+                    <dt class="col-sm-3">コンタンゴ</dt>
+                    <dd class="col-sm-9">先物価格が現物価格より高い状態（ベーシス > 0）。通常の状態とされ、保管コストや将来価格への期待を示唆します。</dd>
+                    <dt class="col-sm-3">バックワーデーション</dt>
+                    <dd class="col-sm-9">先物価格が現物価格より低い状態（ベーシス < 0）。現物の強い需要や短期的な弱気心理を示唆することがあります。</dd>
+                    <dt class="col-sm-3">年率換算ベーシス</dt>
+                    <dd class="col-sm-9">ベーシスを満期までの期間を考慮して年率に換算したもの。異なる限月のベーシスを比較する際に有用です。</dd>
+                    <dt class="col-sm-3">ベーシスZスコア</dt>
+                    <dd class="col-sm-9">ベーシス（通常はベーシス率）が、過去の一定期間の平均から標準偏差の何倍離れているかを示す指標。統計的な割高・割安の判断に使われます。</dd>
+                    <dt class="col-sm-3">市場レジーム</dt>
+                    <dd class="col-sm-9">市場が特定の状態（例: 強いコンタンゴ、中立、強いバックワーデーション）にあることを示す分類。</dd>
+                </dl>
+            </div>
+
             <div class="footer">
                 <p>© 2025 ビットコイン先物ベーシス高度分析レポート</p>
             </div>
         </div>
-        
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     </body>
     </html>
     
