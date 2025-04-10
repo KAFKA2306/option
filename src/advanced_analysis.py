@@ -318,7 +318,10 @@ class BitcoinBasisAnalyzer:
             axes1[3].set_title('市場レジーム (未計算)')
             axes1[3].grid(True)
 
-        plt.tight_layout(rect=[0, 0.03, 1, 0.97]) # Adjust layout for suptitle
+        # Adjust bottom margin specifically for fig1 to prevent overlap
+        plt.subplots_adjust(bottom=0.15) # Add space at the bottom
+        fig1.tight_layout(rect=[0, 0.03, 1, 0.97]) # Adjust layout considering bottom margin and suptitle
+
         # Save Figure 1
         fig1_save_path = os.path.join(plot_dir, f"advanced_basis_analysis_{interval_str}.png")
         try:
@@ -337,7 +340,7 @@ class BitcoinBasisAnalyzer:
             ax2.set_ylabel('Equity')
             ax2.grid(True)
             ax2.legend()
-            plt.tight_layout()
+            plt.tight_layout() # Standard tight layout for this figure
             # Save Figure 2
             fig2_save_path = os.path.join(plot_dir, f"strategy_performance_{interval_str}.png")
             try:
