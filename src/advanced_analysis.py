@@ -4,7 +4,11 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.linear_model import Lasso
 from sklearn.preprocessing import StandardScaler
+import japanize_matplotlib
 import warnings
+import os
+from src.config import OUTPUT_DIR
+
 warnings.filterwarnings('ignore')
 
 # ベーシス分析のための基本クラス
@@ -256,74 +260,94 @@ class BitcoinBasisAnalyzer:
 
         return self.basis_df[['signal', 'strategy_return', 'net_return', 'cumulative_return', 'equity']]
 
-    def plot_basis_analysis(self, figsize=(15, 12)):
-        """ベーシス分析の結果をプロット"""
+    def plot_basis_analysis(self, interval, figsize=(15, 12)):
+        """ベーシス分析の結果をプロットし、ファイルに保存"""
         if self.basis_df is None:
             raise ValueError("先にベーシス計算を実行してください")
 
-        fig, axes = plt.subplots(4, 1, figsize=figsize, sharex=True)
+        interval_str = interval.replace('m', 'min').replace('h', 'hour').replace('d', 'day').replace('w', 'week')
+        plot_dir = os.path.join(OUTPUT_DIR, "plots")
+        os.makedirs(plot_dir, exist_ok=True)
+
+        # --- Figure 1: 価格、ベーシス、Zスコア、レジーム --- 
+        fig1, axes1 = plt.subplots(4, 1, figsize=figsize, sharex=True)
+        fig1.suptitle(f'Bitcoin Basis Analysis ({interval_str})', fontsize=16)
 
         # 価格チャート
-        axes[0].plot(self.basis_df.index, self.basis_df['spot_price'], label='現物価格')
-        axes[0].plot(self.basis_df.index, self.basis_df['futures_price'], label='先物価格')
-        axes[0].set_title('ビットコイン現物・先物価格')
-        axes[0].legend()
-        axes[0].grid(True)
+        axes1[0].plot(self.basis_df.index, self.basis_df['spot_price'], label='現物価格')
+        axes1[0].plot(self.basis_df.index, self.basis_df['futures_price'], label='先物価格')
+        axes1[0].set_title('価格')
+        axes1[0].legend()
+        axes1[0].grid(True)
+        axes1[0].tick_params(axis='y', labelcolor='tab:blue')
 
-        # ベーシスチャート
-        ax1b = axes[1].twinx() # Second y-axis for basis_percent
-        axes[1].plot(self.basis_df.index, self.basis_df['basis'], label='ベーシス ($)', color='tab:blue')
+        # ベーシスチャート (%表示は第2Y軸)
+        ax1b = axes1[1].twinx()
+        axes1[1].plot(self.basis_df.index, self.basis_df['basis'], label='ベーシス ($)', color='tab:blue')
         ax1b.plot(self.basis_df.index, self.basis_df['basis_percent'], label='ベーシス (%)', color='tab:orange', linestyle='--')
-        axes[1].set_ylabel('Basis ($)', color='tab:blue')
+        axes1[1].set_ylabel('Basis ($)', color='tab:blue')
         ax1b.set_ylabel('Basis (%)', color='tab:orange')
-        axes[1].set_title('ベーシスとベーシス率')
-        axes[1].legend(loc='upper left')
+        axes1[1].set_title('ベーシスとベーシス率')
+        axes1[1].legend(loc='upper left')
         ax1b.legend(loc='upper right')
-        axes[1].grid(True)
+        axes1[1].grid(True)
 
         # Zスコアチャート
         if 'basis_zscore' in self.basis_df.columns:
-            axes[2].plot(self.basis_df.index, self.basis_df['basis_zscore'], label='ベーシスZスコア')
-            axes[2].axhline(y=2, color='r', linestyle='--', label='上限閾値 (Z=2)')
-            axes[2].axhline(y=-2, color='g', linestyle='--', label='下限閾値 (Z=-2)')
-            axes[2].set_title('ベーシスZスコア')
-            axes[2].legend()
-            axes[2].grid(True)
+            axes1[2].plot(self.basis_df.index, self.basis_df['basis_zscore'], label='ベーシスZスコア')
+            z_threshold = 2.0 # Assuming threshold used in signals
+            axes1[2].axhline(y=z_threshold, color='r', linestyle='--', label=f'閾値 ±{z_threshold}')
+            axes1[2].axhline(y=-z_threshold, color='g', linestyle='--')
+            axes1[2].set_title('ベーシスZスコア')
+            axes1[2].legend()
+            axes1[2].grid(True)
         else:
-             axes[2].set_title('ベーシスZスコア (未計算)')
-             axes[2].grid(True)
-
+            axes1[2].set_title('ベーシスZスコア (未計算)')
+            axes1[2].grid(True)
 
         # 市場レジームチャート
         if 'market_regime' in self.basis_df.columns:
-            # カラーマッピング
             cmap = {0: 'red', 1: 'gray', 2: 'green'}
             regime_colors = [cmap.get(regime, 'gray') for regime in self.basis_df['market_regime']]
-
-            # Use scatter plot for regimes
-            axes[3].scatter(self.basis_df.index, self.basis_df['market_regime'],
-                         c=regime_colors, label='市場レジーム', s=10) # Smaller points
-            axes[3].set_yticks([0, 1, 2])
-            axes[3].set_yticklabels(['バックワーデーション', '中立', 'コンタンゴ'])
-            axes[3].set_title('市場レジーム分類')
-            axes[3].grid(True)
+            axes1[3].scatter(self.basis_df.index, self.basis_df['market_regime'], c=regime_colors, label='市場レジーム', s=10)
+            axes1[3].set_yticks([0, 1, 2])
+            axes1[3].set_yticklabels(['バックワーデーション', '中立', 'コンタンゴ'])
+            axes1[3].set_title('市場レジーム分類')
+            axes1[3].grid(True)
         else:
-            axes[3].set_title('市場レジーム (未計算)')
-            axes[3].grid(True)
+            axes1[3].set_title('市場レジーム (未計算)')
+            axes1[3].grid(True)
 
+        plt.tight_layout(rect=[0, 0.03, 1, 0.97]) # Adjust layout for suptitle
+        # Save Figure 1
+        fig1_save_path = os.path.join(plot_dir, f"advanced_basis_analysis_{interval_str}.png")
+        try:
+            fig1.savefig(fig1_save_path)
+            print(f"Saved basis analysis plot to {fig1_save_path}")
+        except Exception as e:
+            print(f"Error saving plot {fig1_save_path}: {e}")
+        plt.close(fig1) # Close the figure to free memory
 
-        plt.tight_layout()
-        plt.show()
-
-        # 戦略パフォーマンスのプロット（バックテストが実行されている場合）
+        # --- Figure 2: 戦略パフォーマンス --- 
         if 'equity' in self.basis_df.columns:
-            plt.figure(figsize=(12, 6))
-            plt.plot(self.basis_df.index, self.basis_df['equity'])
-            plt.title('ベーシス戦略のパフォーマンス')
-            plt.xlabel('Date')
-            plt.ylabel('Equity')
-            plt.grid(True)
-            plt.show()
+            fig2, ax2 = plt.subplots(figsize=(12, 6))
+            ax2.plot(self.basis_df.index, self.basis_df['equity'], label='Equity Curve')
+            ax2.set_title(f'Basis Strategy Performance ({interval_str})')
+            ax2.set_xlabel('Date')
+            ax2.set_ylabel('Equity')
+            ax2.grid(True)
+            ax2.legend()
+            plt.tight_layout()
+            # Save Figure 2
+            fig2_save_path = os.path.join(plot_dir, f"strategy_performance_{interval_str}.png")
+            try:
+                fig2.savefig(fig2_save_path)
+                print(f"Saved strategy performance plot to {fig2_save_path}")
+            except Exception as e:
+                print(f"Error saving plot {fig2_save_path}: {e}")
+            plt.close(fig2) # Close the figure
+        else:
+            print("Equity data not found, skipping performance plot.")
 
 # サンプルデータ生成（実際のアプリケーションでは実データに置き換え）
 def generate_sample_data(n_periods=100, start_date='2025-01-01'):
@@ -385,8 +409,8 @@ if __name__ == "__main__":
     # バックテスト
     analyzer.backtest_basis_strategy(initial_capital=10000, transaction_cost=0.001)
 
-    # 結果の可視化
-    analyzer.plot_basis_analysis()
+    # 結果の可視化と保存 (intervalを渡す必要あり、ここでは'sample'を使用)
+    analyzer.plot_basis_analysis(interval='sample')
 
     # 最初の10日間のデータを表示
     print("\n最初の10日間のデータ:")

@@ -54,6 +54,15 @@ def run_advanced_analysis(spot_df, futures_df, interval):
         save_data(stats_df, "analysis", stats_filename)
 
         print(f"Advanced analysis complete. Data saved for {interval_str}.")
+
+        # Generate and save plots after saving data
+        print(f"Generating plots for {interval_str}...")
+        try:
+            # We need the analyzer object which has the plot method
+            analyzer.plot_basis_analysis(interval=interval)
+        except Exception as plot_e:
+            print(f"Error generating plots for {interval_str}: {plot_e}")
+
         return stats_df, analysis_df
 
     except Exception as e:
