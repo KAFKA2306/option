@@ -1,11 +1,7 @@
-import os
-
-import numpy as np
 import pandas as pd
 
-from config import ANALYSIS_OUTPUT_DIR
 from contract_analysis import ContractAwareBitcoinBasisAnalyzer
-from utils import load_data, save_data
+from utils import save_data
 
 
 def run_advanced_analysis(spot_df, futures_df, interval):
