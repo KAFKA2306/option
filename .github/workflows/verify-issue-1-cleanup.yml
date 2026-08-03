@@ -17,10 +17,10 @@ jobs:
       - name: Install focused calculation-test dependencies
         run: python -m pip install --disable-pip-version-check pandas numpy matplotlib seaborn scikit-learn japanize-matplotlib python-binance
       - name: Verify contract-aware basis calculations
-        run: python -m unittest tests.test_contract_analysis -v
+        run: python -m unittest discover -s tests -p 'test_contract_analysis.py' -v
       - name: Delete merged work branches
         run: |
-          for branch in agent/fix-contract-aware-basis ops/finalize-issue-1; do git push origin --delete "$branch" || true; done
+          for branch in agent/fix-contract-aware-basis ops/finalize-issue-1 ops/fix-issue-1-finalizer; do git push origin --delete "$branch" || true; done
       - name: Remove one-time workflow
         run: |
           git config user.name github-actions[bot]
