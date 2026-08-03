@@ -161,29 +161,37 @@ class ContractAwareBitcoinBasisAnalyzer(BitcoinBasisAnalyzer):
             if column in futures_df:
                 self.basis_df[column] = futures_df.loc[self.basis_df.index, column]
 
-        if "funding_rate" in self.basis_df:
-            self.basis_df["funding_rate"] = pd.to_numeric(
-                self.basis_df["funding_rate"], errors="coerce"
-            )
+        if "funding_rate" not in self.basis_df:
+            self.basis_df["funding_interval_hours"] = np.nan
+            self.basis_df["funding_annualized_simple_pct"] = np.nan
+            return
+
+        self.basis_df["funding_rate"] = pd.to_numeric(
+            self.basis_df["funding_rate"], errors="coerce"
+        )
+        if "funding_time" in self.basis_df:
             funding_times = pd.to_datetime(
-                self.basis_df.get("funding_time"),
+                self.basis_df["funding_time"],
                 errors="coerce",
                 utc=True,
             ).dropna()
             unique_times = pd.DatetimeIndex(funding_times.unique()).sort_values()
-            if len(unique_times) >= 2:
-                intervals = pd.Series(unique_times).diff().dropna().dt.total_seconds() / 3600
-                funding_interval_hours = float(intervals.median())
-            else:
-                funding_interval_hours = math.nan
-            self.basis_df["funding_interval_hours"] = funding_interval_hours
-            if funding_interval_hours > 0:
-                payments_per_year = 365 * 24 / funding_interval_hours
-                self.basis_df["funding_annualized_simple_pct"] = (
-                    self.basis_df["funding_rate"] * payments_per_year * 100
-                )
-            else:
-                self.basis_df["funding_annualized_simple_pct"] = np.nan
+        else:
+            unique_times = pd.DatetimeIndex([])
+
+        if len(unique_times) >= 2:
+            intervals = pd.Series(unique_times).diff().dropna().dt.total_seconds() / 3600
+            funding_interval_hours = float(intervals.median())
+        else:
+            funding_interval_hours = math.nan
+        self.basis_df["funding_interval_hours"] = funding_interval_hours
+        if funding_interval_hours > 0:
+            payments_per_year = 365 * 24 / funding_interval_hours
+            self.basis_df["funding_annualized_simple_pct"] = (
+                self.basis_df["funding_rate"] * payments_per_year * 100
+            )
+        else:
+            self.basis_df["funding_annualized_simple_pct"] = np.nan
 
     def calculate_annualized_basis(self) -> pd.Series:
         metadata = self.contract_metadata
