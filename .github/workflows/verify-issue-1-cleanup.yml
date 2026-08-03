@@ -15,7 +15,7 @@ jobs:
       - uses: actions/setup-python@v5
         with: {python-version: '3.12'}
       - name: Install focused calculation-test dependencies
-        run: python -m pip install --disable-pip-version-check pandas numpy matplotlib seaborn scikit-learn japanize-matplotlib python-binance
+        run: python -m pip install --disable-pip-version-check pandas numpy matplotlib seaborn scikit-learn python-binance
       - name: Run tests and build audit evidence
         run: |
           set +e
@@ -54,7 +54,7 @@ jobs:
         run: python -c "import json,sys; data=json.load(open('audit/issue-1-verification.json')); sys.exit(0 if data['status']=='passed' else 1)"
       - name: Delete merged work branches
         run: |
-          for branch in agent/fix-contract-aware-basis ops/finalize-issue-1 ops/fix-issue-1-finalizer ops/diagnose-issue-1-finalizer; do git push origin --delete "$branch" || true; done
+          for branch in agent/fix-contract-aware-basis ops/finalize-issue-1 ops/fix-issue-1-finalizer ops/diagnose-issue-1-finalizer agent/fix-python312-plot-localization; do git push origin --delete "$branch" || true; done
       - name: Remove one-time workflow
         run: |
           git fetch origin main
