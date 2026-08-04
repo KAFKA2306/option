@@ -1,14 +1,24 @@
 # Finance Option Project
 
-## Overview
+Bitcoin現物とBinance USDⓈ-M先物の価格関係を分析するprojectです。先物contractのmetadataを計算境界に含め、**無期限先物のpremium・funding**と、**受渡先物のbasis**を別の指標として扱います。
 
-This project analyzes the relationship between Bitcoin spot and Binance USDⓈ-M futures prices. Contract metadata is part of the calculation boundary: perpetual premium, funding, and delivery-futures basis are reported as different metrics.
+公開report: https://kafka2306.github.io/option/
 
-**Latest report:** https://KAFKA2306.github.io/option/
+> 公開reportは生成物です。常に最新・正常であることはREADMEだけでは保証しません。計算契約の正準はsource codeと回帰testです。
 
-## Contract-aware calculation policy
+## 現在できること
 
-The collector reads Binance futures exchange information and preserves:
+- Binanceの現物・先物market dataを取得する
+- contract type、status、上場日、delivery date、underlying typeを保持する
+- 無期限先物のpremiumとfundingを計算する
+- 受渡先物を実際の残存日数で年率換算する
+- kline intervalに応じてvolatilityの年率換算係数を変える
+- 未知・欠落したcontract typeをfail closedで拒否する
+- 回帰testで主要な金融計算境界を確認する
+
+## contract-aware計算方針
+
+collectorはBinance futures exchange informationから次を保持します。
 
 ```text
 symbol
@@ -19,11 +29,11 @@ deliveryDate
 underlyingType
 ```
 
-Unknown or missing contract types fail closed.
+contract typeが不明または欠落している場合は、推測で計算せず処理を失敗させます。
 
-### Perpetual contracts
+### 無期限先物
 
-For `PERPETUAL` contracts, the report outputs:
+`PERPETUAL`等の無期限contractでは、次を出力します。
 
 ```text
 perpetual_premium_pct = (perpetual_price / spot_price - 1) × 100
@@ -33,13 +43,13 @@ funding_interval_hours
 funding_annualized_simple_pct
 ```
 
-A perpetual contract has no fixed maturity, so `days_to_maturity` and `annualized_basis` remain missing. The system does not assume a fictitious 30-day maturity.
+無期限先物には固定満期がないため、`days_to_maturity`と`annualized_basis`は欠損のままにします。架空の30日満期は仮定しません。
 
-Funding annualization is a separately named simple projection based on the interval observed between historical funding timestamps. It is not presented as delivery-futures basis.
+fundingの年率換算は、観測したfunding timestamp間隔に基づく単純projectionです。受渡先物basisとは別名・別列で保持します。
 
-### Delivery contracts
+### 受渡先物
 
-For supported delivery contract types, each observation uses its actual remaining time:
+対応するdelivery contractでは、各観測時点の実残存日数を使用します。
 
 ```text
 DTE(t) = delivery_datetime - observation_datetime
@@ -50,11 +60,18 @@ simple_annualized_basis(t)
   × 100
 ```
 
-Observations at or after delivery are rejected. The output records `delivery_datetime`, `days_to_maturity`, `annualization_day_count`, and `annualization_method`.
+満期時点以降の観測は拒否します。出力には次を保存します。
 
-### Volatility annualization
+```text
+delivery_datetime
+days_to_maturity
+annualization_day_count
+annualization_method
+```
 
-Volatility uses the actual kline interval and a 365-day crypto trading year. Examples:
+### volatilityの年率換算
+
+volatilityは実際のkline intervalと365日crypto trading yearを使います。
 
 ```text
 1m -> 525,600 periods/year
@@ -64,58 +81,96 @@ Volatility uses the actual kline interval and a 365-day crypto trading year. Exa
 1M -> 12 periods/year
 ```
 
-The previous fixed `sqrt(252)` assumption is not applied to minute, hourly, weekly, or monthly crypto data.
+minute、hourly、weekly、monthly dataへ固定の`sqrt(252)`を適用しません。
 
-## Dependencies
+## 主な構成
+
+| パス | 役割 |
+|---|---|
+| `src/main.py` | pipeline entry point |
+| `src/data_loader.py` | spot・futures data、contract metadata、funding historyの取得 |
+| `src/analysis.py` | 分析処理の統合 |
+| `src/contract_analysis.py` | contract-aware basisと年率換算の境界 |
+| `src/advanced_analysis.py` | 共通統計分析とplot |
+| `tests/test_contract_analysis.py` | 金融計算の回帰test |
+| `index.html` | 生成済みreport |
+| `output/` | 生成data・plot |
+
+## 依存関係
+
+主な依存は次のとおりです。
 
 - pandas
 - numpy
 - python-binance
-- pyarrow / fastparquet
+- pyarrowまたはfastparquet
 - matplotlib
 - scikit-learn
 - seaborn
 - jinja2
 
-Install dependencies:
-
 ```bash
 pip install -r requirements.txt
 ```
 
-## Usage
+依存version、外部API、Binance側schemaが変わる可能性があります。clean environmentでの再現性はCI結果とlock fileの有無を別途確認してください。
 
-1. Set `BINANCE_API_KEY` and `BINANCE_API_SECRET` when required by your environment.
-2. Run the pipeline:
+## 実行
+
+必要な場合は環境変数を設定します。
+
+```text
+BINANCE_API_KEY
+BINANCE_API_SECRET
+```
+
+その後、repository rootから実行します。
 
 ```bash
 python src/main.py
 ```
 
-Public market-data endpoints are used for contract metadata, klines, and funding history. The generated analysis contains the source symbol and contract type so the reported metric can be audited.
+public market-data endpointを利用する処理でも、rate limit、地域・account制約、API変更、symbol停止等により失敗する可能性があります。API keyをrepository、log、Notebook出力へ保存しないでください。
 
-## Validation
+## 検証
 
 ```bash
 python -m unittest discover -s tests -v
 ```
 
-Regression tests cover:
+`tests/test_contract_analysis.py`では次を確認します。
 
-- perpetual premium without fictitious annualized basis
-- delivery contracts with 5-day, 30-day, and 90-day DTE
-- rejection at or after delivery
-- funding interval inference
-- interval-specific volatility annualization
-- fail-closed handling of unknown contract types
+- 無期限先物ではpremiumを計算し、架空のannualized basisを作らない
+- delivery contractの5日・30日・90日DTE
+- delivery時点以降の観測を拒否する
+- funding intervalをtimestampから推定する
+- interval別のvolatility年率換算
+- 未知contract typeをfail closedで拒否する
 
-## Files
+## 正準dataと生成物
 
-- `src/main.py`: pipeline entry point
-- `src/data_loader.py`: spot/futures data, contract metadata, and funding history
-- `src/analysis.py`: analysis orchestration
-- `src/contract_analysis.py`: contract-aware basis and annualization boundary
-- `src/advanced_analysis.py`: common statistical analysis and plotting
-- `tests/test_contract_analysis.py`: financial calculation regression tests
-- `index.html`: generated report
-- `output/`: generated data and plots
+source codeとtestは計算契約を示します。`index.html`と`output/`は、ある時点のdata・設定・codeから生成されたartifactです。生成物を最新reportとして扱うには、少なくとも次を確認してください。
+
+- data as-of
+- source symbolとcontract type
+- observation timeとtimezone
+- code commit
+- API取得成功と欠損状態
+- report生成時の設定
+
+## 既知の制約
+
+- market dataの正確性・完全性は外部APIに依存します
+- simple annualizationは複利、funding変動、取引cost、margin、liquidation riskを表しません
+- spotとfuturesのtimestamp整合が崩れるとbasisも不正確になります
+- 過去のpremium、funding、basisは将来のreturnを保証しません
+- 生成結果は投資助言や売買signalではありません
+
+## セキュリティ
+
+- API keyとsecretをcommitしない
+- `.env`を使う場合は`.gitignore`へ追加する
+- read-onlyで足りる処理に取引権限を付与しない
+- 漏えいの可能性があるcredentialはprovider側で失効・再発行する
+
+**README監査日:** 2026-08-05
