@@ -1,0 +1,42 @@
+name: Carry monitor contract
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install test dependencies
+        run: python -m pip install --disable-pip-version-check pandas numpy matplotlib seaborn scikit-learn
+      - name: Compile changed Python
+        run: python -m py_compile src/carry_monitor.py tests/test_carry_monitor.py
+      - name: Carry monitor unit tests
+        run: python -m unittest tests.test_carry_monitor -v
+      - name: Existing contract regression tests
+        run: PYTHONPATH=src python -m unittest tests.test_contract_analysis -v
+      - name: Validate sample watchlist and credential boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from src.carry_monitor import validate_watchlist
+          watchlist = json.loads(Path('config/watchlists/btc-sample.json').read_text())
+          validate_watchlist(watchlist)
+          assert 'api_key' not in json.dumps(watchlist).lower()
+          assert 'secret' not in json.dumps(watchlist).lower()
+          PY
+      - name: Ensure checkout remains clean
+        run: |
+          find . -type d -name __pycache__ -prune -exec rm -rf {} +
+          test -z "$(git status --porcelain)"

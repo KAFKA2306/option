@@ -1,0 +1,18 @@
+{
+  "schema_version": "carry-watchlist.v1",
+  "id": "btc-public-sample",
+  "version": "1.0.0",
+  "entries": [
+    {
+      "id": "btc-usdt-perpetual",
+      "spot_symbol": "BTCUSDT",
+      "futures_symbol": "BTCUSDT",
+      "expected_contract_type": "PERPETUAL",
+      "enabled": true,
+      "thresholds": {
+        "premium_pct": 1.0,
+        "funding_rate": 0.001
+      }
+    }
+  ]
+}
