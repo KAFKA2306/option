@@ -1,0 +1,16 @@
+{
+  "schema_version": "carry-monitor-kpi.v1",
+  "issue": 9,
+  "measurement_window_days": 60,
+  "status": "NOT_STARTED",
+  "metrics": {
+    "sample_monitor_opened": 0,
+    "direct_proposals": 0,
+    "qualified_inquiry": 0,
+    "customer_watchlist_demo": 0,
+    "pilot_booked": 0,
+    "paid_pilot": 0,
+    "continuation_requested": 0
+  },
+  "evidence": []
+}
