@@ -1,9 +1,9 @@
-const worker = new Worker("./worker.mjs", { type: "module" });
+const worker = new Worker(new URL("./worker.mjs", import.meta.url), { type: "module" });
 const form = document.querySelector("form");
 const output = document.querySelector("pre");
 let snapshot;
 
-fetch("./snapshot.json", { cache: "no-store" }).then((r) => r.json()).then((data) => {
+fetch(new URL("./snapshot.json", import.meta.url), { cache: "no-store" }).then((r) => r.json()).then((data) => {
   snapshot = data;
   document.querySelector("#as-of").textContent = data.observation_time;
   document.querySelector("#source").textContent = data.provenance.source_url;
