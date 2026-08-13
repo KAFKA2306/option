@@ -1,0 +1,25 @@
+{
+  "schema_version": "option.browser-scenario.v1",
+  "snapshot_kind": "repository_test_fixture",
+  "market_data_disclaimer": "This is a deterministic regression fixture, not current or historical market data.",
+  "observation_time": "2026-08-01T16:00:00+00:00",
+  "interval": "8h",
+  "contract": {
+    "symbol": "BTCUSDT",
+    "contract_type": "PERPETUAL",
+    "status": "TRADING",
+    "delivery_time": null
+  },
+  "market": {
+    "spot_prices": [98.0, 99.0, 100.0],
+    "futures_price": 101.0,
+    "funding_rate": 0.0001,
+    "funding_interval_hours": 8.0
+  },
+  "provenance": {
+    "source_type": "repository_test_fixture",
+    "source_commit": "cdc3a950c99f6fc6f0518f313d3ba208eb7d95ae",
+    "source_url": "https://github.com/KAFKA2306/option/blob/cdc3a950c99f6fc6f0518f313d3ba208eb7d95ae/tests/test_contract_analysis.py",
+    "network_access_required": false
+  }
+}
