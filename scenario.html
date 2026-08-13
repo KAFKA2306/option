@@ -1,5 +1,23 @@
 <!doctype html>
 <html lang="ja">
-<head><meta charset="utf-8"><title>BTC Futures Scenario</title></head>
-<body><h1>保存snapshotのシナリオ再計算</h1><form><button type="submit">Pythonで再計算</button></form><pre></pre><script type="module" src="scenario/app.js"></script></body>
-</html>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>BTC Futures Scenario</title></head>
+<body>
+<main style="max-width:760px;margin:40px auto;font-family:system-ui,sans-serif;line-height:1.6;padding:0 20px">
+<p><a href="./">← report</a></p>
+<h1>保存snapshotのシナリオ再計算</h1>
+<p><strong>検証fixture:</strong> 市場価格ではありません。ブラウザからBinance APIへ接続せず、commit済みsnapshotだけをPyodide Web Workerへ渡します。</p>
+<p>as-of: <span id="as-of">loading</span><br>source: <span id="source">loading</span></p>
+<form style="display:grid;gap:10px">
+<label>contract type <select name="contract_type"><option>PERPETUAL</option><option>CURRENT_QUARTER</option><option>NEXT_QUARTER</option></select></label>
+<label>interval <input name="interval" value="8h" required></label>
+<label>futures price <input name="futures_price" type="number" step="any" value="101" required></label>
+<label>funding rate <input name="funding_rate" type="number" step="any" value="0.0001"></label>
+<label>funding interval hours <input name="funding_interval_hours" type="number" step="any" value="8"></label>
+<label>delivery time <input name="delivery_time" value="2026-08-31T16:00:00+00:00"></label>
+<button type="submit">Pythonで再計算</button>
+</form>
+<h2>Result</h2><pre style="overflow:auto;background:#111827;color:#e5e7eb;padding:16px">初回Pyodide起動後に結果を表示します。</pre>
+<p>金融計算は <code>src/scenario_core.py</code>。JavaScriptは入力受渡しと表示のみです。</p>
+</main>
+<script type="module" src="scenario/app.js"></script>
+</body></html>
