@@ -1,5 +1,8 @@
 # Finance Option Project
 
+[![Browser scenario contract](https://github.com/KAFKA2306/option/actions/workflows/browser-scenario.yml/badge.svg)](https://github.com/KAFKA2306/option/actions/workflows/browser-scenario.yml)
+[![Carry monitor contract](https://github.com/KAFKA2306/option/actions/workflows/carry-monitor.yml/badge.svg)](https://github.com/KAFKA2306/option/actions/workflows/carry-monitor.yml)
+
 Bitcoin現物とBinance USDⓈ-M先物の価格関係を分析するprojectです。先物contractのmetadataを計算境界に含め、**無期限先物のpremium・funding**と、**受渡先物のbasis**を別の指標として扱います。
 
 公開report: https://kafka2306.github.io/option/
