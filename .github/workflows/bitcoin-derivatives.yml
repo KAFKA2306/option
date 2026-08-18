@@ -1,0 +1,137 @@
+name: Bitcoin derivatives evidence
+
+on:
+  pull_request:
+    paths:
+      - src/collect_market_structure.py
+      - tests/test_market_structure_collector.py
+      - .github/workflows/bitcoin-derivatives.yml
+      - README.md
+  push:
+    branches: [main]
+    paths:
+      - src/collect_market_structure.py
+      - tests/test_market_structure_collector.py
+      - .github/workflows/bitcoin-derivatives.yml
+      - README.md
+  schedule:
+    - cron: '25 20 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: bitcoin-derivatives-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  evidence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Compile and unit test
+        run: |
+          python -m py_compile src/collect_market_structure.py tests/test_market_structure_collector.py
+          python -m unittest -v tests.test_market_structure_collector
+
+      - name: Collect Binance primary evidence
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            python src/collect_market_structure.py \
+              --data-root build/data/derivatives \
+              --api-dir build/api/v1/bitcoin-derivatives
+          else
+            python src/collect_market_structure.py
+          fi
+
+      - name: Audit coverage and calculation boundaries
+        run: |
+          python - <<'PY'
+          import hashlib
+          import json
+          from datetime import datetime
+          from pathlib import Path
+
+          if '${{ github.event_name }}' == 'pull_request':
+              data_root = Path('build/data/derivatives')
+              api = Path('build/api/v1/bitcoin-derivatives')
+          else:
+              data_root = Path('data/derivatives')
+              api = Path('api/v1/bitcoin-derivatives')
+
+          index = json.loads((api / 'index.json').read_text())
+          daily = json.loads((api / 'daily.json').read_text())['records']
+          oi = json.loads((api / 'open-interest.json').read_text())
+          term = json.loads((api / 'term-structure.json').read_text())['contracts']
+          manifest = json.loads((data_root / 'raw/latest-manifest.json').read_text())
+
+          coverage = index['coverage']
+          assert coverage['perpetual_day_count'] >= 90, coverage
+          assert coverage['funding_event_count'] >= 180, coverage
+          assert coverage['active_delivery_contract_count'] >= 1, coverage
+          assert coverage['delivery_day_count'] > 0, coverage
+          assert oi['retention_note'].endswith('latest 1 month.')
+
+          first = datetime.fromisoformat(coverage['funding_first_time'])
+          last = datetime.fromisoformat(coverage['funding_last_time'])
+          assert (last - first).days >= 89, coverage
+
+          perpetual = [row for row in daily if row['contract_type'] == 'PERPETUAL']
+          delivery = [row for row in daily if row['contract_type'] != 'PERPETUAL']
+          assert perpetual and delivery
+          assert all(row['delivery_basis_pct'] is None for row in perpetual)
+          assert all(row['days_to_maturity'] is None for row in perpetual)
+          assert all(row['perpetual_premium_pct'] is None for row in delivery)
+          assert all(row['funding_rate_sum'] is None for row in delivery)
+          assert all(row['days_to_maturity'] > 0 for row in delivery)
+          assert all(row['annualized_delivery_basis_pct'] is not None for row in delivery)
+          assert any(row['contract_type'] == 'PERPETUAL' for row in term)
+          assert any(row['contract_type'] != 'PERPETUAL' for row in term)
+
+          for item in manifest['evidence'].values():
+              raw = Path(item['path']).read_bytes()
+              assert hashlib.sha256(raw).hexdigest() == item['sha256']
+          PY
+
+      - name: Rebuild API from raw evidence
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            DATA_ROOT=build/data/derivatives
+            API_ROOT=build/api/v1/bitcoin-derivatives
+          else
+            DATA_ROOT=data/derivatives
+            API_ROOT=api/v1/bitcoin-derivatives
+          fi
+          rm -rf build/rebuilt-bitcoin-derivatives
+          python src/collect_market_structure.py \
+            --offline \
+            --data-root "$DATA_ROOT" \
+            --api-dir build/rebuilt-bitcoin-derivatives
+          diff -ru "$API_ROOT" build/rebuilt-bitcoin-derivatives
+
+      - name: Upload pull-request evidence
+        if: github.event_name == 'pull_request'
+        uses: actions/upload-artifact@v7
+        with:
+          name: bitcoin-derivatives-evidence
+          path: build
+          retention-days: 30
+
+      - name: Commit changed evidence and views
+        if: github.event_name != 'pull_request'
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add data/derivatives api/v1/bitcoin-derivatives
+          if git diff --cached --quiet; then
+            echo 'No derivatives evidence change.'
+            exit 0
+          fi
+          git commit -m 'data: update Bitcoin derivatives evidence'
+          git push
