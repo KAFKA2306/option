@@ -1,179 +1,92 @@
-# Finance Option Project
+# Bitcoin Derivatives Market Structure
 
-[![Browser scenario contract](https://github.com/KAFKA2306/option/actions/workflows/browser-scenario.yml/badge.svg)](https://github.com/KAFKA2306/option/actions/workflows/browser-scenario.yml)
+[![Bitcoin derivatives evidence](https://github.com/KAFKA2306/option/actions/workflows/bitcoin-derivatives.yml/badge.svg)](https://github.com/KAFKA2306/option/actions/workflows/bitcoin-derivatives.yml)
 [![Carry monitor contract](https://github.com/KAFKA2306/option/actions/workflows/carry-monitor.yml/badge.svg)](https://github.com/KAFKA2306/option/actions/workflows/carry-monitor.yml)
 
-Bitcoin現物とBinance USDⓈ-M先物の価格関係を分析するprojectです。先物contractのmetadataを計算境界に含め、**無期限先物のpremium・funding**と、**受渡先物のbasis**を別の指標として扱います。
+Bitcoin現物とBinance USDⓈ-M derivativesを、**raw evidenceから再生成できる時系列dataset**として保存するrepositoryです。reportやplotより、`api/v1/bitcoin-derivatives/` を正準成果物として扱います。
 
-公開report: https://kafka2306.github.io/option/
+## 正準data
 
-> 公開reportは生成物です。常に最新・正常であることはREADMEだけでは保証しません。計算契約の正準はsource codeと回帰testです。
+- [dataset index](api/v1/bitcoin-derivatives/index.json)
+- [current market structure](api/v1/bitcoin-derivatives/current.json)
+- [daily observations](api/v1/bitcoin-derivatives/daily.json)
+- [funding events](api/v1/bitcoin-derivatives/funding.json)
+- [open interest](api/v1/bitcoin-derivatives/open-interest.json)
+- [term structure](api/v1/bitcoin-derivatives/term-structure.json)
+- [latest raw manifest](data/derivatives/raw/latest-manifest.json)
+- [contract metadata history](data/derivatives/metadata-history.json)
 
-## 現在できること
+`Bitcoin derivatives evidence` workflowが毎日一次情報を取得し、raw responseをSHA-256でcontent-addressed保存した後、上記APIを生成します。CIでは同じraw evidenceだけからoffline再生成し、live生成物と差分がないことを検証します。
 
-- Binanceの現物・先物market dataを取得する
-- contract type、status、上場日、delivery date、underlying typeを保持する
-- 無期限先物のpremiumとfundingを計算する
-- 受渡先物を実際の残存日数で年率換算する
-- kline intervalに応じてvolatilityの年率換算係数を変える
-- 未知・欠落したcontract typeをfail closedで拒否する
-- 回帰testで主要な金融計算境界を確認する
+## 計算境界
 
-## contract-aware計算方針
+### PERPETUAL
 
-collectorはBinance futures exchange informationから次を保持します。
+無期限先物では次を保持します。
 
-```text
-symbol
-contractType
-status
-onboardDate
-deliveryDate
-underlyingType
-```
+- spot / contract / mark / index price
+- perpetual premium
+- mark-index premium
+- funding rate / funding timestamp
+- open interest
+- volume / quote volume
+- best bid / ask
 
-contract typeが不明または欠落している場合は、推測で計算せず処理を失敗させます。
+固定満期を仮定しないため、`days_to_maturity` と delivery basis は `null` です。
 
-### 無期限先物
+### Delivery futures
 
-`PERPETUAL`等の無期限contractでは、次を出力します。
-
-```text
-perpetual_premium_pct = (perpetual_price / spot_price - 1) × 100
-funding_rate
-funding_time
-funding_interval_hours
-funding_annualized_simple_pct
-```
-
-無期限先物には固定満期がないため、`days_to_maturity`と`annualized_basis`は欠損のままにします。架空の30日満期は仮定しません。
-
-fundingの年率換算は、観測したfunding timestamp間隔に基づく単純projectionです。受渡先物basisとは別名・別列で保持します。
-
-### 受渡先物
-
-対応するdelivery contractでは、各観測時点の実残存日数を使用します。
+受渡先物では実際の `deliveryDate` からDTEを計算し、次を保持します。
 
 ```text
-DTE(t) = delivery_datetime - observation_datetime
-
-simple_annualized_basis(t)
-  = (futures_price(t) / spot_price(t) - 1)
-  × 365 / DTE(t)
-  × 100
+delivery_basis_pct = (futures_price / spot_price - 1) × 100
+annualized_delivery_basis_pct = delivery_basis_pct × 365 / DTE
 ```
 
-満期時点以降の観測は拒否します。出力には次を保存します。
+funding / perpetual premiumは `null` です。満期後のcontractや未知のactive `contractType` は成功値で埋めず、処理を失敗させます。
+
+## Source contract
+
+collector: [`src/collect_market_structure.py`](src/collect_market_structure.py)
+
+data path:
 
 ```text
-delivery_datetime
-days_to_maturity
-annualization_day_count
-annualization_method
+Binance public market data
+  ↓
+data/derivatives/raw/objects/<sha256>.json
+  ↓
+data/derivatives/raw/latest-manifest.json
+  ↓
+api/v1/bitcoin-derivatives/*.json
 ```
 
-### volatilityの年率換算
+各raw objectはsource URLとSHA-256をmanifestに保持します。API schema drift、symbol停止、空response、unknown contract type、raw hash不一致はfail closedです。
 
-volatilityは実際のkline intervalと365日crypto trading yearを使います。
-
-```text
-1m -> 525,600 periods/year
-1h -> 8,760 periods/year
-1d -> 365 periods/year
-1w -> 365 / 7 periods/year
-1M -> 12 periods/year
-```
-
-minute、hourly、weekly、monthly dataへ固定の`sqrt(252)`を適用しません。
-
-## 主な構成
-
-| パス | 役割 |
-|---|---|
-| `src/main.py` | pipeline entry point |
-| `src/data_loader.py` | spot・futures data、contract metadata、funding historyの取得 |
-| `src/analysis.py` | 分析処理の統合 |
-| `src/contract_analysis.py` | contract-aware basisと年率換算の境界 |
-| `src/advanced_analysis.py` | 共通統計分析とplot |
-| `tests/test_contract_analysis.py` | 金融計算の回帰test |
-| `index.html` | 生成済みreport |
-| `output/` | 生成data・plot |
-
-## 依存関係
-
-主な依存は次のとおりです。
-
-- pandas
-- numpy
-- python-binance
-- pyarrowまたはfastparquet
-- matplotlib
-- scikit-learn
-- seaborn
-- jinja2
-
-```bash
-pip install -r requirements.txt
-```
-
-依存version、外部API、Binance側schemaが変わる可能性があります。clean environmentでの再現性はCI結果とlock fileの有無を別途確認してください。
+Open Interest Statisticsの履歴取得範囲はBinance側の公開範囲に従い、取得不能な過去値を推測・forward fillしません。この制約は`open-interest.json`にも明示します。
 
 ## 実行
 
-必要な場合は環境変数を設定します。
-
-```text
-BINANCE_API_KEY
-BINANCE_API_SECRET
-```
-
-その後、repository rootから実行します。
+public market-dataのみを使うため、このcollectorにAPI keyは不要です。
 
 ```bash
-python src/main.py
+python src/collect_market_structure.py
 ```
 
-public market-data endpointを利用する処理でも、rate limit、地域・account制約、API変更、symbol停止等により失敗する可能性があります。API keyをrepository、log、Notebook出力へ保存しないでください。
-
-## 検証
+保存済みraw evidenceから再生成する場合:
 
 ```bash
-python -m unittest discover -s tests -v
+python src/collect_market_structure.py --offline
 ```
 
-`tests/test_contract_analysis.py`では次を確認します。
+検証:
 
-- 無期限先物ではpremiumを計算し、架空のannualized basisを作らない
-- delivery contractの5日・30日・90日DTE
-- delivery時点以降の観測を拒否する
-- funding intervalをtimestampから推定する
-- interval別のvolatility年率換算
-- 未知contract typeをfail closedで拒否する
+```bash
+python -m unittest -v tests.test_market_structure_collector
+```
 
-## 正準dataと生成物
+## Legacy analysis
 
-source codeとtestは計算契約を示します。`index.html`と`output/`は、ある時点のdata・設定・codeから生成されたartifactです。生成物を最新reportとして扱うには、少なくとも次を確認してください。
+`index.html`、`output/`、既存のplot/report pipelineは過去の探索・可視化資産です。現在値や正準datasetとしては使用しません。公開reportは補助surfaceです: https://kafka2306.github.io/option/
 
-- data as-of
-- source symbolとcontract type
-- observation timeとtimezone
-- code commit
-- API取得成功と欠損状態
-- report生成時の設定
-
-## 既知の制約
-
-- market dataの正確性・完全性は外部APIに依存します
-- simple annualizationは複利、funding変動、取引cost、margin、liquidation riskを表しません
-- spotとfuturesのtimestamp整合が崩れるとbasisも不正確になります
-- 過去のpremium、funding、basisは将来のreturnを保証しません
-- 生成結果は投資助言や売買signalではありません
-
-## セキュリティ
-
-- API keyとsecretをcommitしない
-- `.env`を使う場合は`.gitignore`へ追加する
-- read-onlyで足りる処理に取引権限を付与しない
-- 漏えいの可能性があるcredentialはprovider側で失効・再発行する
-
-**README監査日:** 2026-08-05
+投資助言・売買signalを提供するrepositoryではありません。
