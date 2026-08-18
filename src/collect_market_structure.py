@@ -11,8 +11,8 @@ from typing import Any
 from urllib.parse import urlencode
 from urllib.request import Request, urlopen
 
-SPOT_BASE = "https://api.binance.com"
-FUTURES_BASE = "https://fapi.binance.com"
+SPOT_BASE = "https://data-api.binance.vision"
+FUTURES_BASE = "https://www.binance.com"
 PAIR = "BTCUSDT"
 SUPPORTED = {"PERPETUAL", "CURRENT_MONTH", "NEXT_MONTH", "CURRENT_QUARTER", "NEXT_QUARTER"}
 OI_NOTE = "Binance Open Interest Statistics exposes only the latest 1 month."
@@ -32,6 +32,8 @@ def get_json(base: str, path: str, params: dict[str, object] | None = None) -> t
     req = Request(url, headers={"User-Agent": "KAFKA2306/bitcoin-derivatives"})
     with urlopen(req, timeout=60) as response:
         raw = response.read()
+    if not raw:
+        raise RuntimeError(f"empty Binance response: {url}")
     return json.loads(raw), raw, url
 
 
@@ -281,7 +283,10 @@ def build(manifest: dict[str, Any], payloads: dict[str, Any], root: Path, api_di
           update_history: bool = True) -> dict[str, Any]:
     contracts = active_contracts(payloads["exchange"])
     now = datetime.fromisoformat(str(manifest["retrieved_at"]).replace("Z", "+00:00")).astimezone(UTC)
-    daily, funding, oi, term = daily_rows(payloads, contracts), funding_rows(payloads["funding"]), oi_rows(payloads["oi_history"]), current_terms(payloads, contracts, now)
+    daily = daily_rows(payloads, contracts)
+    funding = funding_rows(payloads["funding"])
+    oi = oi_rows(payloads["oi_history"])
+    term = current_terms(payloads, contracts, now)
     perp_dates = sorted({row["date"] for row in daily if row["contract_type"] == "PERPETUAL"})
     delivery_dates = sorted({row["date"] for row in daily if row["contract_type"] != "PERPETUAL"})
     if not perp_dates:
