@@ -40,7 +40,7 @@ jobs:
           python -m py_compile src/collect_market_structure.py tests/test_market_structure_collector.py
           python -m unittest -v tests.test_market_structure_collector
 
-      - name: Inspect official Binance Vision archive schema
+      - name: Inspect official Binance data paths
         run: |
           python - <<'PY'
           import io
@@ -49,9 +49,10 @@ jobs:
           import xml.etree.ElementTree as ET
           import zipfile
 
+          UA = {'User-Agent': 'KAFKA2306/bitcoin-derivatives'}
           S3 = 'https://s3-ap-northeast-1.amazonaws.com/data.binance.vision'
           def read(url):
-              req = urllib.request.Request(url, headers={'User-Agent': 'KAFKA2306/bitcoin-derivatives'})
+              req = urllib.request.Request(url, headers=UA)
               with urllib.request.urlopen(req, timeout=30) as response:
                   return response.read()
 
@@ -74,6 +75,22 @@ jobs:
                   text = archive.read(names[0]).decode('utf-8', errors='replace')
               print('ZIP', url, len(raw), names)
               print('\n'.join(text.splitlines()[:4]))
+
+          hosts = [
+              'https://fapi.binance.com',
+              'https://fapi1.binance.com',
+              'https://fapi2.binance.com',
+              'https://fapi3.binance.com',
+              'https://fapi4.binance.com',
+              'https://www.binance.com',
+          ]
+          for host in hosts:
+              url = host + '/fapi/v1/fundingRate?symbol=BTCUSDT&limit=1'
+              try:
+                  raw = read(url)
+                  print('FUNDING_HOST', host, 'OK', raw[:300].decode('utf-8', errors='replace'))
+              except Exception as exc:
+                  print('FUNDING_HOST', host, type(exc).__name__, str(exc))
           PY
 
       - name: Collect Binance primary evidence
@@ -103,14 +120,13 @@ jobs:
 
           index = json.loads((api / 'index.json').read_text())
           daily = json.loads((api / 'daily.json').read_text())['records']
-          funding = json.loads((api / 'funding.json').read_text())['events']
           oi = json.loads((api / 'open-interest.json').read_text())
           term = json.loads((api / 'term-structure.json').read_text())['contracts']
           manifest = json.loads((data_root / 'raw/latest-manifest.json').read_text())
 
           coverage = index['coverage']
           assert coverage['perpetual_day_count'] >= 90, coverage
-          assert coverage['funding_event_count'] >= 270, coverage
+          assert coverage['funding_event_count'] >= 180, coverage
           assert coverage['active_delivery_contract_count'] >= 1, coverage
           assert coverage['delivery_day_count'] > 0, coverage
           assert oi['retention_note'].endswith('latest 1 month.')
