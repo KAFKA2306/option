@@ -1,0 +1,209 @@
+{
+  "records": [
+    {
+      "open_interest": 101264.626,
+      "open_interest_value": 6605274763.2935095,
+      "symbol": "BTCUSDT",
+      "timestamp": "2026-07-21T00:00:00+00:00",
+      "timestamp_ms": 1784592000000
+    },
+    {
+      "open_interest": 104322.618,
+      "open_interest_value": 6939780491.3814,
+      "symbol": "BTCUSDT",
+      "timestamp": "2026-07-22T00:00:00+00:00",
+      "timestamp_ms": 1784678400000
+    },
+    {
+      "open_interest": 102239.457,
+      "open_interest_value": 6756421156.070681,
+      "symbol": "BTCUSDT",
+      "timestamp": "2026-07-23T00:00:00+00:00",
+      "timestamp_ms": 1784764800000
+    },
+    {
+      "open_interest": 104584.915,
+      "open_interest_value": 6805304178.103276,
+      "symbol": "BTCUSDT",
+      "timestamp": "2026-07-24T00:00:00+00:00",
+      "timestamp_ms": 1784851200000
+    },
+    {
+      "open_interest": 106114.818,
+      "open_interest_value": 6803700116.8152,
+      "symbol": "BTCUSDT",
+      "timestamp": "2026-07-25T00:00:00+00:00",
+      "timestamp_ms": 1784937600000
+    },
+    {
+      "open_interest": 107509.0,
+      "open_interest_value": 6917476416.904509,
+      "symbol": "BTCUSDT",
+      "timestamp": "2026-07-26T00:00:00+00:00",
+      "timestamp_ms": 1785024000000
+    },
+    {
+      "open_interest": 104354.198,
+      "open_interest_value": 6821873937.9154,
+      "symbol": "BTCUSDT",
+      "timestamp": "2026-07-27T00:00:00+00:00",
+      "timestamp_ms": 1785110400000
+    },
+    {
+      "open_interest": 105602.91,
+      "open_interest_value": 6729450397.131,
+      "symbol": "BTCUSDT",
+      "timestamp": "2026-07-28T00:00:00+00:00",
+      "timestamp_ms": 1785196800000
+    },
+    {
+      "open_interest": 103253.297,
+      "open_interest_value": 6598257390.1692,
+      "symbol": "BTCUSDT",
+      "timestamp": "2026-07-29T00:00:00+00:00",
+      "timestamp_ms": 1785283200000
+    },
+    {
+      "open_interest": 104348.71,
+      "open_interest_value": 6674049577.761,
+      "symbol": "BTCUSDT",
+      "timestamp": "2026-07-30T00:00:00+00:00",
+      "timestamp_ms": 1785369600000
+    },
+    {
+      "open_interest": 106595.936,
+      "open_interest_value": 6902141264.728566,
+      "symbol": "BTCUSDT",
+      "timestamp": "2026-07-31T00:00:00+00:00",
+      "timestamp_ms": 1785456000000
+    },
+    {
+      "open_interest": 109523.589,
+      "open_interest_value": 6884630899.8222,
+      "symbol": "BTCUSDT",
+      "timestamp": "2026-08-01T00:00:00+00:00",
+      "timestamp_ms": 1785542400000
+    },
+    {
+      "open_interest": 108516.03,
+      "open_interest_value": 6813971110.569,
+      "symbol": "BTCUSDT",
+      "timestamp": "2026-08-02T00:00:00+00:00",
+      "timestamp_ms": 1785628800000
+    },
+    {
+      "open_interest": 109126.559,
+      "open_interest_value": 6934992824.45,
+      "symbol": "BTCUSDT",
+      "timestamp": "2026-08-03T00:00:00+00:00",
+      "timestamp_ms": 1785715200000
+    },
+    {
+      "open_interest": 108556.03,
+      "open_interest_value": 6893003948.116,
+      "symbol": "BTCUSDT",
+      "timestamp": "2026-08-04T00:00:00+00:00",
+      "timestamp_ms": 1785801600000
+    },
+    {
+      "open_interest": 108225.652,
+      "open_interest_value": 6934623587.2912,
+      "symbol": "BTCUSDT",
+      "timestamp": "2026-08-05T00:00:00+00:00",
+      "timestamp_ms": 1785888000000
+    },
+    {
+      "open_interest": 107104.832,
+      "open_interest_value": 6922603001.0048,
+      "symbol": "BTCUSDT",
+      "timestamp": "2026-08-06T00:00:00+00:00",
+      "timestamp_ms": 1785974400000
+    },
+    {
+      "open_interest": 105767.527,
+      "open_interest_value": 6800841409.3473,
+      "symbol": "BTCUSDT",
+      "timestamp": "2026-08-07T00:00:00+00:00",
+      "timestamp_ms": 1786060800000
+    },
+    {
+      "open_interest": 106954.613,
+      "open_interest_value": 6939798035.198703,
+      "symbol": "BTCUSDT",
+      "timestamp": "2026-08-08T00:00:00+00:00",
+      "timestamp_ms": 1786147200000
+    },
+    {
+      "open_interest": 107208.906,
+      "open_interest_value": 6960955962.3294935,
+      "symbol": "BTCUSDT",
+      "timestamp": "2026-08-09T00:00:00+00:00",
+      "timestamp_ms": 1786233600000
+    },
+    {
+      "open_interest": 107032.434,
+      "open_interest_value": 6943198658.022434,
+      "symbol": "BTCUSDT",
+      "timestamp": "2026-08-10T00:00:00+00:00",
+      "timestamp_ms": 1786320000000
+    },
+    {
+      "open_interest": 106280.266,
+      "open_interest_value": 6795475183.8272,
+      "symbol": "BTCUSDT",
+      "timestamp": "2026-08-11T00:00:00+00:00",
+      "timestamp_ms": 1786406400000
+    },
+    {
+      "open_interest": 109259.581,
+      "open_interest_value": 6945839157.3739,
+      "symbol": "BTCUSDT",
+      "timestamp": "2026-08-12T00:00:00+00:00",
+      "timestamp_ms": 1786492800000
+    },
+    {
+      "open_interest": 111075.705,
+      "open_interest_value": 7048264430.493,
+      "symbol": "BTCUSDT",
+      "timestamp": "2026-08-13T00:00:00+00:00",
+      "timestamp_ms": 1786579200000
+    },
+    {
+      "open_interest": 109583.468,
+      "open_interest_value": 6953694869.931596,
+      "symbol": "BTCUSDT",
+      "timestamp": "2026-08-14T00:00:00+00:00",
+      "timestamp_ms": 1786665600000
+    },
+    {
+      "open_interest": 111988.29,
+      "open_interest_value": 7056991606.970017,
+      "symbol": "BTCUSDT",
+      "timestamp": "2026-08-15T00:00:00+00:00",
+      "timestamp_ms": 1786752000000
+    },
+    {
+      "open_interest": 111497.403,
+      "open_interest_value": 7030357248.762,
+      "symbol": "BTCUSDT",
+      "timestamp": "2026-08-16T00:00:00+00:00",
+      "timestamp_ms": 1786838400000
+    },
+    {
+      "open_interest": 110943.209,
+      "open_interest_value": 6975665209.084,
+      "symbol": "BTCUSDT",
+      "timestamp": "2026-08-17T00:00:00+00:00",
+      "timestamp_ms": 1786924800000
+    },
+    {
+      "open_interest": 106396.499,
+      "open_interest_value": 6863100374.011925,
+      "symbol": "BTCUSDT",
+      "timestamp": "2026-08-18T00:00:00+00:00",
+      "timestamp_ms": 1787011200000
+    }
+  ],
+  "retention_note": "Binance Open Interest Statistics exposes only the latest 1 month.",
+  "schema_version": 1
+}

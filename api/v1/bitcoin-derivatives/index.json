@@ -1,0 +1,41 @@
+{
+  "coverage": {
+    "active_contract_count": 3,
+    "active_delivery_contract_count": 2,
+    "delivery_day_count": 100,
+    "delivery_first_date": "2026-05-11",
+    "delivery_last_date": "2026-08-18",
+    "funding_event_count": 300,
+    "funding_first_time": "2026-05-10T16:00:00+00:00",
+    "funding_last_time": "2026-08-18T08:00:00.001000+00:00",
+    "metadata_change_count": 1,
+    "open_interest_first_time": "2026-07-21T00:00:00+00:00",
+    "open_interest_last_time": "2026-08-18T00:00:00+00:00",
+    "open_interest_observation_count": 29,
+    "perpetual_day_count": 100,
+    "perpetual_first_date": "2026-05-11",
+    "perpetual_last_date": "2026-08-18",
+    "raw_evidence_count": 24
+  },
+  "dataset": "BTC Binance derivatives market structure",
+  "pair": "BTCUSDT",
+  "retrieved_at": "2026-08-18T15:56:11.033012+00:00",
+  "rules": [
+    "PERPETUAL premium/funding and delivery basis are different metrics.",
+    "days_to_maturity and annualized_delivery_basis_pct exist only for delivery contracts.",
+    "unknown active contract types fail closed.",
+    "raw endpoint bytes are content-addressed by SHA-256 before derived views are written.",
+    "Binance Open Interest Statistics exposes only the latest 1 month."
+  ],
+  "schema_version": 1,
+  "venue": "Binance",
+  "views": {
+    "current": "current.json",
+    "daily": "daily.json",
+    "funding": "funding.json",
+    "metadata_history": "../../../data/derivatives/metadata-history.json",
+    "open_interest": "open-interest.json",
+    "raw_manifest": "../../../data/derivatives/raw/latest-manifest.json",
+    "term_structure": "term-structure.json"
+  }
+}
