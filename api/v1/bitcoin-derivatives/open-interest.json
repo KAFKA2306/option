@@ -1,13 +1,6 @@
 {
   "records": [
     {
-      "open_interest": 102239.457,
-      "open_interest_value": 6756421156.070681,
-      "symbol": "BTCUSDT",
-      "timestamp": "2026-07-23T00:00:00+00:00",
-      "timestamp_ms": 1784764800000
-    },
-    {
       "open_interest": 104584.915,
       "open_interest_value": 6805304178.103276,
       "symbol": "BTCUSDT",
@@ -202,6 +195,13 @@
       "symbol": "BTCUSDT",
       "timestamp": "2026-08-20T00:00:00+00:00",
       "timestamp_ms": 1787184000000
+    },
+    {
+      "open_interest": 107624.685,
+      "open_interest_value": 7856597118.995357,
+      "symbol": "BTCUSDT",
+      "timestamp": "2026-08-21T00:00:00+00:00",
+      "timestamp_ms": 1787270400000
     }
   ],
   "retention_note": "Binance Open Interest Statistics exposes only the latest 1 month.",
