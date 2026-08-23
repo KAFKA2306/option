@@ -5,6 +5,10 @@
 
 Bitcoin現物とBinance USDⓈ-M derivativesを、**raw evidenceから再生成できる時系列dataset**として保存するrepositoryです。reportやplotより、`api/v1/bitcoin-derivatives/` を正準成果物として扱います。
 
+公開ダッシュボード: https://kafka2306.github.io/option/
+
+Pagesは正準APIをbrowserからread-onlyで参照し、PERPETUAL premium / fundingとdelivery-futures basisを分離して表示します。Pages専用のcurrent valueや第二のdatabaseは持ちません。
+
 ## 正準data
 
 - [dataset index](api/v1/bitcoin-derivatives/index.json)
@@ -30,7 +34,6 @@ Bitcoin現物とBinance USDⓈ-M derivativesを、**raw evidenceから再生成�
 - funding rate / funding timestamp
 - open interest
 - volume / quote volume
-- best bid / ask
 
 固定満期を仮定しないため、`days_to_maturity` と delivery basis は `null` です。
 
@@ -59,6 +62,8 @@ data/derivatives/raw/objects/<sha256>.json
 data/derivatives/raw/latest-manifest.json
   ↓
 api/v1/bitcoin-derivatives/*.json
+  ↓
+GitHub Pages (read-only)
 ```
 
 各raw objectはsource URLとSHA-256をmanifestに保持します。API schema drift、symbol停止、空response、unknown contract type、raw hash不一致はfail closedです。
@@ -83,10 +88,11 @@ python src/collect_market_structure.py --offline
 
 ```bash
 python -m unittest -v tests.test_market_structure_collector
+node --check dashboard.js
 ```
 
-## Legacy analysis
+## Historical analysis assets
 
-`index.html`、`output/`、既存のplot/report pipelineは過去の探索・可視化資産です。現在値や正準datasetとしては使用しません。公開reportは補助surfaceです: https://kafka2306.github.io/option/
+`output/` と旧plot/report pipelineは過去の探索資産で、現在値や正準datasetとして使用しません。公開トップの `index.html` はそれらの固定snapshotを表示せず、正準APIを直接読むDaily Dashboardです。
 
 投資助言・売買signalを提供するrepositoryではありません。
