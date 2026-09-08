@@ -1,27 +1,6 @@
 {
   "events": [
     {
-      "funding_rate": 4.432e-05,
-      "funding_time": "2026-05-31T00:00:00+00:00",
-      "funding_time_ms": 1780185600000,
-      "mark_price": 73856.9,
-      "symbol": "BTCUSDT"
-    },
-    {
-      "funding_rate": 5.663e-05,
-      "funding_time": "2026-05-31T08:00:00+00:00",
-      "funding_time_ms": 1780214400000,
-      "mark_price": 73833.3,
-      "symbol": "BTCUSDT"
-    },
-    {
-      "funding_rate": 5.988e-05,
-      "funding_time": "2026-05-31T16:00:00.004000+00:00",
-      "funding_time_ms": 1780243200004,
-      "mark_price": 73613.4,
-      "symbol": "BTCUSDT"
-    },
-    {
       "funding_rate": 5.703e-05,
       "funding_time": "2026-06-01T00:00:00.001000+00:00",
       "funding_time_ms": 1780272000001,
@@ -2098,6 +2077,27 @@
       "funding_time": "2026-09-07T16:00:00.003000+00:00",
       "funding_time_ms": 1788796800003,
       "mark_price": 78776.74225362,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "funding_rate": 4.542e-05,
+      "funding_time": "2026-09-08T00:00:00.004000+00:00",
+      "funding_time_ms": 1788825600004,
+      "mark_price": 79075.9,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "funding_rate": 8.18e-05,
+      "funding_time": "2026-09-08T08:00:00.002000+00:00",
+      "funding_time_ms": 1788854400002,
+      "mark_price": 78445.1,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "funding_rate": 9.029e-05,
+      "funding_time": "2026-09-08T16:00:00.001000+00:00",
+      "funding_time_ms": 1788883200001,
+      "mark_price": 78870.1,
       "symbol": "BTCUSDT"
     }
   ],
