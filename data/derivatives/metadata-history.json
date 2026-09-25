@@ -32,6 +32,39 @@
       ],
       "metadata_sha256": "6341a6c9cbdf5d08c1d6c51d9733da5ebfc8cc2e3fd76187ab68411914be8dba",
       "observed_at": "2026-08-18T15:56:11.033012+00:00"
+    },
+    {
+      "contracts": [
+        {
+          "contract_type": "CURRENT_QUARTER",
+          "delivery_date_ms": 1798185600000,
+          "onboard_date_ms": 1782460800000,
+          "pair": "BTCUSDT",
+          "status": "TRADING",
+          "symbol": "BTCUSDT_261225",
+          "underlying_type": "COIN"
+        },
+        {
+          "contract_type": "NEXT_QUARTER",
+          "delivery_date_ms": 1806048000000,
+          "onboard_date_ms": 1790323200000,
+          "pair": "BTCUSDT",
+          "status": "TRADING",
+          "symbol": "BTCUSDT_270326",
+          "underlying_type": "COIN"
+        },
+        {
+          "contract_type": "PERPETUAL",
+          "delivery_date_ms": 4133404800000,
+          "onboard_date_ms": 1567965300000,
+          "pair": "BTCUSDT",
+          "status": "TRADING",
+          "symbol": "BTCUSDT",
+          "underlying_type": "COIN"
+        }
+      ],
+      "metadata_sha256": "d07bd79770e3d4230dd912d3f1ab5cc64b97a955a70cbc4cc1df843217650718",
+      "observed_at": "2026-09-25T23:20:56.329584+00:00"
     }
   ],
   "schema_version": 1
