@@ -33,11 +33,11 @@ def mayAnnualize (t : ContractType) (daysLeft : Nat) : Bool :=
   isDelivery t && decide (0 < daysLeft)
 
 theorem complete_classification (t : ContractType) :
-    isPerpetual t || isDelivery t = true := by
+    (isPerpetual t || isDelivery t) = true := by
   cases t <;> decide
 
 theorem exclusive_classification (t : ContractType) :
-    isPerpetual t && isDelivery t = false := by
+    (isPerpetual t && isDelivery t) = false := by
   cases t <;> decide
 
 theorem perpetual_never_delivery_annualized (daysLeft : Nat) :
