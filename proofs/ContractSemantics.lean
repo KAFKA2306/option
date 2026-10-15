@@ -40,10 +40,10 @@ theorem exclusive_classification (t : ContractType) :
     isPerpetual t && isDelivery t = false := by
   cases t <;> decide
 
-theorem perpetual_never_delivery_annualized (t : ContractType)
-    (daysLeft : Nat) (h : isPerpetual t = true) :
-    mayAnnualize t daysLeft = false := by
-  cases t <;> simp_all [isPerpetual, mayAnnualize, isDelivery]
+theorem perpetual_never_delivery_annualized (daysLeft : Nat) :
+    mayAnnualize .perpetual daysLeft = false ∧
+    mayAnnualize .perpetualDelivering daysLeft = false := by
+  simp [mayAnnualize, isPerpetual, isDelivery]
 
 theorem zero_days_never_annualized (t : ContractType) :
     mayAnnualize t 0 = false := by
