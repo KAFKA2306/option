@@ -1,0 +1,43 @@
+name: Lean 4 futures semantics
+
+on:
+  pull_request:
+    paths:
+      - 'proofs/**'
+      - 'src/scenario_core.py'
+      - 'scenario/snapshot.json'
+      - 'scripts/check_lean_scenario_bridge.py'
+      - 'tests/test_scenario_core.py'
+      - '.github/workflows/lean-scenario.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'proofs/**'
+      - 'src/scenario_core.py'
+      - 'scenario/snapshot.json'
+      - 'scripts/check_lean_scenario_bridge.py'
+      - 'tests/test_scenario_core.py'
+      - '.github/workflows/lean-scenario.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  classification:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Check Lean formal statements
+        uses: leanprover/lean-action@38fbc41a8c28c4cbaec22d7f7de508ec2e7c0dd9
+        with:
+          lake-package-directory: proofs
+          build: 'true'
+          test: 'false'
+          lint: 'false'
+          use-mathlib-cache: 'false'
+      - name: Cross-check production Python scenarios with Lean
+        run: python scripts/check_lean_scenario_bridge.py

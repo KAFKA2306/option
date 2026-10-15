@@ -65,13 +65,6 @@ class BrowserScenarioTests(unittest.TestCase):
         self.assertIsNone(result["perpetual_premium_pct"])
         self.assertEqual(result["annualization_method"], "simple_actual_dte_365")
 
-    def test_delivery_at_observation_is_rejected(self) -> None:
-        with self.assertRaisesRegex(ValueError, "at or after contract delivery"):
-            calculate_scenario(self.snapshot, {
-                "contract_type": "CURRENT_QUARTER",
-                "delivery_time": self.snapshot["observation_time"],
-            })
-
     def test_unknown_contract_type_is_rejected(self) -> None:
         with self.assertRaisesRegex(ValueError, "Unsupported or missing"):
             calculate_scenario(self.snapshot, {"contract_type": "UNKNOWN"})

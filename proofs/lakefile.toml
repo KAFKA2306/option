@@ -1,0 +1,6 @@
+name = "contract_semantics_proofs"
+version = "0.1.0"
+defaultTargets = ["ContractSemantics"]
+
+[[lean_lib]]
+name = "ContractSemantics"
