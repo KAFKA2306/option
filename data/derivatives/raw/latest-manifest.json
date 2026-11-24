@@ -1,129 +1,129 @@
 {
   "evidence": {
     "contract:BTCUSDT:depth": {
-      "path": "data/derivatives/raw/objects/034c0f6892de10a3f0661f37d1ae4afabadee42ea876d7499a45e46133feadb3.json",
-      "sha256": "034c0f6892de10a3f0661f37d1ae4afabadee42ea876d7499a45e46133feadb3",
+      "path": "data/derivatives/raw/objects/8568408e59130e848036f692682926aad2ca7254a7ac20fd5f8fa42e06f3ebfe.json",
+      "sha256": "8568408e59130e848036f692682926aad2ca7254a7ac20fd5f8fa42e06f3ebfe",
       "source_url": "https://www.binance.com/fapi/v1/depth?symbol=BTCUSDT&limit=5"
     },
     "contract:BTCUSDT:klines": {
-      "path": "data/derivatives/raw/objects/7be81187b2ff85877dbd9886e1e9d744e4353b791dff2b2f20caa98d9d317cab.json",
-      "sha256": "7be81187b2ff85877dbd9886e1e9d744e4353b791dff2b2f20caa98d9d317cab",
-      "source_url": "https://www.binance.com/fapi/v1/klines?symbol=BTCUSDT&interval=1d&startTime=1786755443337&limit=200"
+      "path": "data/derivatives/raw/objects/c4c6df1d19e4ce484af546f4a7f3bd5371491cfc2a11dde6e2b97a63b2f533a1.json",
+      "sha256": "c4c6df1d19e4ce484af546f4a7f3bd5371491cfc2a11dde6e2b97a63b2f533a1",
+      "source_url": "https://www.binance.com/fapi/v1/klines?symbol=BTCUSDT&interval=1d&startTime=1786855858850&limit=200"
     },
     "contract:BTCUSDT:mark": {
-      "path": "data/derivatives/raw/objects/4a82fc2408d7bee51a2f8b95756ef63cb69eff62509cfc9b47a33ccf36ed4f1e.json",
-      "sha256": "4a82fc2408d7bee51a2f8b95756ef63cb69eff62509cfc9b47a33ccf36ed4f1e",
-      "source_url": "https://www.binance.com/fapi/v1/markPriceKlines?symbol=BTCUSDT&interval=1d&startTime=1786755443337&limit=200"
+      "path": "data/derivatives/raw/objects/48fb199851ab69e3ee10e9a28d0a9a9e6fde428207e70907e8f414fd86663869.json",
+      "sha256": "48fb199851ab69e3ee10e9a28d0a9a9e6fde428207e70907e8f414fd86663869",
+      "source_url": "https://www.binance.com/fapi/v1/markPriceKlines?symbol=BTCUSDT&interval=1d&startTime=1786855858850&limit=200"
     },
     "contract:BTCUSDT:oi": {
-      "path": "data/derivatives/raw/objects/0c5307ffa934d3bfcc81c0ab80146043cd564a2fcf0362df126f6ae1cf99d798.json",
-      "sha256": "0c5307ffa934d3bfcc81c0ab80146043cd564a2fcf0362df126f6ae1cf99d798",
+      "path": "data/derivatives/raw/objects/dc1fdd09e39179db86ccf6df47922eb69908adb74e739da2ba8520a0e7163fb7.json",
+      "sha256": "dc1fdd09e39179db86ccf6df47922eb69908adb74e739da2ba8520a0e7163fb7",
       "source_url": "https://www.binance.com/fapi/v1/openInterest?symbol=BTCUSDT"
     },
     "contract:BTCUSDT:premium": {
-      "path": "data/derivatives/raw/objects/0cf831f4d89f3e9b9205b8d29c84a3288eb8f15e15831a365576f543dff067fb.json",
-      "sha256": "0cf831f4d89f3e9b9205b8d29c84a3288eb8f15e15831a365576f543dff067fb",
+      "path": "data/derivatives/raw/objects/03761e0a8714d50babcddcacfc046e313bd12b8f04c498af1847604bc7e64854.json",
+      "sha256": "03761e0a8714d50babcddcacfc046e313bd12b8f04c498af1847604bc7e64854",
       "source_url": "https://www.binance.com/fapi/v1/premiumIndex?symbol=BTCUSDT"
     },
     "contract:BTCUSDT:ticker": {
-      "path": "data/derivatives/raw/objects/612253933e5b7039fbe61e9fc1e090994da4181b05c5455507e6f50a91f9705c.json",
-      "sha256": "612253933e5b7039fbe61e9fc1e090994da4181b05c5455507e6f50a91f9705c",
+      "path": "data/derivatives/raw/objects/f8381a6e6600c45ffd47e06dc09aa66ad098cfce0622c4d6dd8ea66fcde158bd.json",
+      "sha256": "f8381a6e6600c45ffd47e06dc09aa66ad098cfce0622c4d6dd8ea66fcde158bd",
       "source_url": "https://www.binance.com/fapi/v1/ticker/24hr?symbol=BTCUSDT"
     },
     "contract:BTCUSDT_261225:depth": {
-      "path": "data/derivatives/raw/objects/6bf93366df157875b8a51f3e68a4ed076b79d68dee4bedad626332dbfc505368.json",
-      "sha256": "6bf93366df157875b8a51f3e68a4ed076b79d68dee4bedad626332dbfc505368",
+      "path": "data/derivatives/raw/objects/cf9214481d6509814debda473c71fce5763f9945d0f790487917fd9eac8d4563.json",
+      "sha256": "cf9214481d6509814debda473c71fce5763f9945d0f790487917fd9eac8d4563",
       "source_url": "https://www.binance.com/fapi/v1/depth?symbol=BTCUSDT_261225&limit=5"
     },
     "contract:BTCUSDT_261225:klines": {
-      "path": "data/derivatives/raw/objects/0a1455aa64b77aa729c81297414837f9951c77cf8552214ea7f413c2b5aada88.json",
-      "sha256": "0a1455aa64b77aa729c81297414837f9951c77cf8552214ea7f413c2b5aada88",
-      "source_url": "https://www.binance.com/fapi/v1/klines?symbol=BTCUSDT_261225&interval=1d&startTime=1786755443337&limit=200"
+      "path": "data/derivatives/raw/objects/183729879e1f0e32091a2d35e16df6ea4e8b320a670e08295b14b73ca29c114e.json",
+      "sha256": "183729879e1f0e32091a2d35e16df6ea4e8b320a670e08295b14b73ca29c114e",
+      "source_url": "https://www.binance.com/fapi/v1/klines?symbol=BTCUSDT_261225&interval=1d&startTime=1786855858850&limit=200"
     },
     "contract:BTCUSDT_261225:mark": {
-      "path": "data/derivatives/raw/objects/51eaf80a436e11ce2c43c047d55715e754f7150a9acd6d75512b0c7d6890c54a.json",
-      "sha256": "51eaf80a436e11ce2c43c047d55715e754f7150a9acd6d75512b0c7d6890c54a",
-      "source_url": "https://www.binance.com/fapi/v1/markPriceKlines?symbol=BTCUSDT_261225&interval=1d&startTime=1786755443337&limit=200"
+      "path": "data/derivatives/raw/objects/73b12a2853bdbf6fabce960b3598ae2ae979990cebaffb73b3149af8da383d30.json",
+      "sha256": "73b12a2853bdbf6fabce960b3598ae2ae979990cebaffb73b3149af8da383d30",
+      "source_url": "https://www.binance.com/fapi/v1/markPriceKlines?symbol=BTCUSDT_261225&interval=1d&startTime=1786855858850&limit=200"
     },
     "contract:BTCUSDT_261225:oi": {
-      "path": "data/derivatives/raw/objects/502cb35decb18f565d1c45d2c05fd13d02c0f76f62ccef6fff13825944051c71.json",
-      "sha256": "502cb35decb18f565d1c45d2c05fd13d02c0f76f62ccef6fff13825944051c71",
+      "path": "data/derivatives/raw/objects/e8b06a61d2a3d5e92ceb209c4ffd11e380a9b4fd353ed752e435261011b27ac6.json",
+      "sha256": "e8b06a61d2a3d5e92ceb209c4ffd11e380a9b4fd353ed752e435261011b27ac6",
       "source_url": "https://www.binance.com/fapi/v1/openInterest?symbol=BTCUSDT_261225"
     },
     "contract:BTCUSDT_261225:premium": {
-      "path": "data/derivatives/raw/objects/a79378dc374adf70f328e6408de51e82e05c16f5302693b9ebbf27f8482a8e8c.json",
-      "sha256": "a79378dc374adf70f328e6408de51e82e05c16f5302693b9ebbf27f8482a8e8c",
+      "path": "data/derivatives/raw/objects/0c60e3cfb24365eae19345dafac03f1789b25168cdfdc178b000e50661f0e3fa.json",
+      "sha256": "0c60e3cfb24365eae19345dafac03f1789b25168cdfdc178b000e50661f0e3fa",
       "source_url": "https://www.binance.com/fapi/v1/premiumIndex?symbol=BTCUSDT_261225"
     },
     "contract:BTCUSDT_261225:ticker": {
-      "path": "data/derivatives/raw/objects/3d4cae096fd003ceebc7ae13f76a6947990d675740635f9b4b625a041127a79c.json",
-      "sha256": "3d4cae096fd003ceebc7ae13f76a6947990d675740635f9b4b625a041127a79c",
+      "path": "data/derivatives/raw/objects/f9d2c911ff76086714d967c41de33d86662f4bc8c827775fb5fac85202d4293e.json",
+      "sha256": "f9d2c911ff76086714d967c41de33d86662f4bc8c827775fb5fac85202d4293e",
       "source_url": "https://www.binance.com/fapi/v1/ticker/24hr?symbol=BTCUSDT_261225"
     },
     "contract:BTCUSDT_270326:depth": {
-      "path": "data/derivatives/raw/objects/4ea3ddd803a49dcbbe0844503c7d37c37df1ea6cbc845327cee35656a8b39028.json",
-      "sha256": "4ea3ddd803a49dcbbe0844503c7d37c37df1ea6cbc845327cee35656a8b39028",
+      "path": "data/derivatives/raw/objects/2fa7a3ebe572a46f56aaeef4165133067dfd8d974bdec5bf96a8e26d6b09b836.json",
+      "sha256": "2fa7a3ebe572a46f56aaeef4165133067dfd8d974bdec5bf96a8e26d6b09b836",
       "source_url": "https://www.binance.com/fapi/v1/depth?symbol=BTCUSDT_270326&limit=5"
     },
     "contract:BTCUSDT_270326:klines": {
-      "path": "data/derivatives/raw/objects/572e0b63a8e0f1cff0c304137865fec19c040b7c29c9fd5feb0e212dda88bb8e.json",
-      "sha256": "572e0b63a8e0f1cff0c304137865fec19c040b7c29c9fd5feb0e212dda88bb8e",
+      "path": "data/derivatives/raw/objects/88ffc268664965e62c3e9392d1da0868b9dda50e0c206ccfd7283fd89a712d53.json",
+      "sha256": "88ffc268664965e62c3e9392d1da0868b9dda50e0c206ccfd7283fd89a712d53",
       "source_url": "https://www.binance.com/fapi/v1/klines?symbol=BTCUSDT_270326&interval=1d&startTime=1790323200000&limit=200"
     },
     "contract:BTCUSDT_270326:mark": {
-      "path": "data/derivatives/raw/objects/35790c27b86f4d0d5a6a1b95855273b09a820393f8f6209fdc094bc0eabfbae6.json",
-      "sha256": "35790c27b86f4d0d5a6a1b95855273b09a820393f8f6209fdc094bc0eabfbae6",
+      "path": "data/derivatives/raw/objects/1122bb9f0f0c5cac685ec160d0c303f29fed2de065745f3c4a482f61f7bfab5e.json",
+      "sha256": "1122bb9f0f0c5cac685ec160d0c303f29fed2de065745f3c4a482f61f7bfab5e",
       "source_url": "https://www.binance.com/fapi/v1/markPriceKlines?symbol=BTCUSDT_270326&interval=1d&startTime=1790323200000&limit=200"
     },
     "contract:BTCUSDT_270326:oi": {
-      "path": "data/derivatives/raw/objects/93bd69abe4b6b4dee9347a881ad1f9e9a313bcdf578aeda81495ae3986fa43d1.json",
-      "sha256": "93bd69abe4b6b4dee9347a881ad1f9e9a313bcdf578aeda81495ae3986fa43d1",
+      "path": "data/derivatives/raw/objects/8cfc58ba17304da7a4da2026ab0278bb5ae438459f4b512c9bc1430c3cf9b9a5.json",
+      "sha256": "8cfc58ba17304da7a4da2026ab0278bb5ae438459f4b512c9bc1430c3cf9b9a5",
       "source_url": "https://www.binance.com/fapi/v1/openInterest?symbol=BTCUSDT_270326"
     },
     "contract:BTCUSDT_270326:premium": {
-      "path": "data/derivatives/raw/objects/f8e592b41b7778576328c1db41600783e5515cf01c2f8a6e98cb237ec5605cc2.json",
-      "sha256": "f8e592b41b7778576328c1db41600783e5515cf01c2f8a6e98cb237ec5605cc2",
+      "path": "data/derivatives/raw/objects/32f257fb129c2611036a72faf0912bff3fb5e3f72f9a091215fb34087c5d986d.json",
+      "sha256": "32f257fb129c2611036a72faf0912bff3fb5e3f72f9a091215fb34087c5d986d",
       "source_url": "https://www.binance.com/fapi/v1/premiumIndex?symbol=BTCUSDT_270326"
     },
     "contract:BTCUSDT_270326:ticker": {
-      "path": "data/derivatives/raw/objects/804e9b7221e50d8e24411e758bddf93f4f64424aff5ddbe429b810026d46f9e6.json",
-      "sha256": "804e9b7221e50d8e24411e758bddf93f4f64424aff5ddbe429b810026d46f9e6",
+      "path": "data/derivatives/raw/objects/a9acb3880d58f816cb1186ff40eb62311222ab2d7f78a2476823b4df77bd5b3f.json",
+      "sha256": "a9acb3880d58f816cb1186ff40eb62311222ab2d7f78a2476823b4df77bd5b3f",
       "source_url": "https://www.binance.com/fapi/v1/ticker/24hr?symbol=BTCUSDT_270326"
     },
     "exchange": {
-      "path": "data/derivatives/raw/objects/daba03160581672a171d8ca164df3e1c9276984a0b4ec84a900e91849097906c.json",
-      "sha256": "daba03160581672a171d8ca164df3e1c9276984a0b4ec84a900e91849097906c",
+      "path": "data/derivatives/raw/objects/4dbf79b9c573c5652bbe931a851802d4499f031df3dee75494c9b061ab83814a.json",
+      "sha256": "4dbf79b9c573c5652bbe931a851802d4499f031df3dee75494c9b061ab83814a",
       "source_url": "https://www.binance.com/fapi/v1/exchangeInfo"
     },
     "funding": {
-      "path": "data/derivatives/raw/objects/5b09b842a62578884e1425974fc68502990a0a0353dae9de5b111ca8bbb4f723.json",
-      "sha256": "5b09b842a62578884e1425974fc68502990a0a0353dae9de5b111ca8bbb4f723",
-      "source_url": "https://www.binance.com/fapi/v1/fundingRate?symbol=BTCUSDT&startTime=1786755443337&limit=1000"
+      "path": "data/derivatives/raw/objects/6304622ab6a62ca22ab233adcb3ad5c118bf0ab2ff3343ca1c539147b4d0fbd8.json",
+      "sha256": "6304622ab6a62ca22ab233adcb3ad5c118bf0ab2ff3343ca1c539147b4d0fbd8",
+      "source_url": "https://www.binance.com/fapi/v1/fundingRate?symbol=BTCUSDT&startTime=1786855858850&limit=1000"
     },
     "index_klines": {
-      "path": "data/derivatives/raw/objects/d4cd14f637eb88149ab7aa306b7653bdcfe011534cdf43cc815d4c916fc9e67a.json",
-      "sha256": "d4cd14f637eb88149ab7aa306b7653bdcfe011534cdf43cc815d4c916fc9e67a",
-      "source_url": "https://www.binance.com/fapi/v1/indexPriceKlines?pair=BTCUSDT&interval=1d&startTime=1786755443337&limit=200"
+      "path": "data/derivatives/raw/objects/d84a95151a16637c10d903ba1413af78a186bca7dc77bb1dde27860c395f5576.json",
+      "sha256": "d84a95151a16637c10d903ba1413af78a186bca7dc77bb1dde27860c395f5576",
+      "source_url": "https://www.binance.com/fapi/v1/indexPriceKlines?pair=BTCUSDT&interval=1d&startTime=1786855858850&limit=200"
     },
     "oi_history": {
-      "path": "data/derivatives/raw/objects/96f8c80b4b2fb6a728ec01ed1b8a722a81643841c1233a45ba443e2f8ff58afe.json",
-      "sha256": "96f8c80b4b2fb6a728ec01ed1b8a722a81643841c1233a45ba443e2f8ff58afe",
-      "source_url": "https://www.binance.com/futures/data/openInterestHist?symbol=BTCUSDT&period=1d&startTime=1792889843337&limit=500"
+      "path": "data/derivatives/raw/objects/9295e597988a1d5a7d007b8657956810d109f25a53fe9eb0fa78e1ed0d8609a9.json",
+      "sha256": "9295e597988a1d5a7d007b8657956810d109f25a53fe9eb0fa78e1ed0d8609a9",
+      "source_url": "https://www.binance.com/futures/data/openInterestHist?symbol=BTCUSDT&period=1d&startTime=1792990258850&limit=500"
     },
     "spot_book": {
-      "path": "data/derivatives/raw/objects/9823c7bf9e48d4f49e820c6dbc8662bb0608e7e5d373d00d53fca64033b473ea.json",
-      "sha256": "9823c7bf9e48d4f49e820c6dbc8662bb0608e7e5d373d00d53fca64033b473ea",
+      "path": "data/derivatives/raw/objects/a2bb0d390af67003b040f268b6797c8cabf214bb66e85eddb28b448bedcca436.json",
+      "sha256": "a2bb0d390af67003b040f268b6797c8cabf214bb66e85eddb28b448bedcca436",
       "source_url": "https://data-api.binance.vision/api/v3/ticker/bookTicker?symbol=BTCUSDT"
     },
     "spot_klines": {
-      "path": "data/derivatives/raw/objects/1aa080bda671f83d24d761a3d2f63a6f71fe50c047c414f487220dd2248083ee.json",
-      "sha256": "1aa080bda671f83d24d761a3d2f63a6f71fe50c047c414f487220dd2248083ee",
-      "source_url": "https://data-api.binance.vision/api/v3/klines?symbol=BTCUSDT&interval=1d&startTime=1786755443337&limit=200"
+      "path": "data/derivatives/raw/objects/77e1846ad31ffc56f091e5aa142da21267ab11c8d30c2b878fb25986e4144355.json",
+      "sha256": "77e1846ad31ffc56f091e5aa142da21267ab11c8d30c2b878fb25986e4144355",
+      "source_url": "https://data-api.binance.vision/api/v3/klines?symbol=BTCUSDT&interval=1d&startTime=1786855858850&limit=200"
     }
   },
   "lookback_days_requested": 100,
   "pair": "BTCUSDT",
-  "retrieved_at": "2026-11-23T00:57:23.337707+00:00",
+  "retrieved_at": "2026-11-24T04:50:58.850349+00:00",
   "schema_version": 1,
   "venue": "Binance"
 }
